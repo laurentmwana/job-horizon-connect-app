@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Candidate;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Recruiter;
@@ -28,6 +29,8 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $user->id
             ]);
         }
+
+        Candidate::factory(20)->create();
 
     }
 }
