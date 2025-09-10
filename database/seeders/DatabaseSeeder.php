@@ -39,7 +39,10 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-
-        Offer::factory(30)->create();
+        foreach (Recruiter::all() as $recruiter) {
+            Offer::factory(2)->create([
+                'recruiter_id' => $recruiter->id
+            ]);
+        }
     }
 }

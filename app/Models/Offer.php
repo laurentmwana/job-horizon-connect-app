@@ -18,12 +18,19 @@ class Offer extends Model
         'description',
         'start_at',
         'end_at',
-        'gender',
-        'user_id'
+        'recruiter_id'
     ];
 
     protected $casts = [
         'start_at' => 'date',
         'end_at' => 'date',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Recruiter, Offer>
+     */
+    public function recruiter()
+    {
+        return $this->belongsTo(Recruiter::class);
+    }
 }
