@@ -15,4 +15,13 @@ class JobPosition extends Model
         'name',
         'description',
     ];
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Offer, JobPosition, \Illuminate\Database\Eloquent\Relations\Pivot>
+     */
+    public function offers()
+    {
+        return $this->belongsToMany(Offer::class);
+    }
 }

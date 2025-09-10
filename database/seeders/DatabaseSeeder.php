@@ -47,5 +47,14 @@ class DatabaseSeeder extends Seeder
         }
 
         JobPosition::factory(10)->create();
+
+        foreach (Offer::all() as $offer) {
+            $randomMaxJobPositions = random_int(2, 3);
+            $jobsIds = [];
+            for ($i=0; $i < $randomMaxJobPositions; $i++) { 
+                $jobsIds[] = JobPosition::all()->random()->id;
+            }
+            $offer->jobPosition()->sync($jobsIds);
+        }
     }
 }

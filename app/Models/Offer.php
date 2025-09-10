@@ -33,4 +33,13 @@ class Offer extends Model
     {
         return $this->belongsTo(Recruiter::class);
     }
+    
+  
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<JobPosition, Offer, \Illuminate\Database\Eloquent\Relations\Pivot>
+     */
+    public function jobPosition()
+    {
+        return $this->belongsToMany(JobPosition::class);
+    }
 }
