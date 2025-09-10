@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Candidate;
+use App\Models\JobPosition;
 use App\Models\Offer;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -44,5 +45,7 @@ class DatabaseSeeder extends Seeder
                 'recruiter_id' => $recruiter->id
             ]);
         }
+
+        JobPosition::factory(10)->create();
     }
 }
