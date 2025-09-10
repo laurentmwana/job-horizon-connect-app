@@ -21,6 +21,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        Recruiter::factory(20)->create();
+        $users = User::factory(20)->create();
+
+        foreach ($users as $user) {
+            Recruiter::factory(20)->create([
+                'user_id' => $user->id
+            ]);
+        }
+
     }
 }
