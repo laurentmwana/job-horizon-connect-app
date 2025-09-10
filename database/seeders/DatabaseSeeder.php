@@ -22,15 +22,20 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        $users = User::factory(20)->create();
+        $recruiterUsers = User::factory(20)->create();
 
-        foreach ($users as $user) {
-            Recruiter::factory(20)->create([
+        foreach ($recruiterUsers as $user) {
+            Recruiter::factory()->create([
                 'user_id' => $user->id
             ]);
         }
 
-        Candidate::factory(20)->create();
+        $candidateUsers = User::factory(20)->create();
 
+        foreach ($candidateUsers as $user) {
+            Candidate::factory()->create([
+                'user_id' => $user->id
+            ]);
+        }
     }
 }
