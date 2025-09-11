@@ -24,4 +24,12 @@ class JobPosition extends Model
     {
         return $this->belongsToMany(Offer::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Skill, JobPosition>
+     */
+    public function skills()
+    {
+        return $this->hasMany(Skill::class);
+    }
 }

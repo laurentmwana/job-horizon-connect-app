@@ -58,6 +58,14 @@ class DatabaseSeeder extends Seeder
             $offer->jobPosition()->sync($jobsIds);
         }
 
-        Skill::factory(30)->create();
+
+        foreach (JobPosition::all() as $job) {
+            $randomMaxJSkills = random_int(2, 5);
+
+            Skill::factory($randomMaxJSkills)->create([
+                'job_position_id' => $job->id
+            ]);
+
+        }
     }
 }

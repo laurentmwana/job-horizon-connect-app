@@ -14,5 +14,14 @@ class Skill extends Model
     protected $fillable = [
         'name',
         'description',
+        'job_position_id'
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<JobPosition, Skill>
+     */
+    public function jobPosition()
+    {
+        return $this->belongsTo(JobPosition::class);
+    }
 }
