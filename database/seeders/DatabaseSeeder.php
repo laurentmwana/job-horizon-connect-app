@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Candidate;
 use App\Models\JobPosition;
 use App\Models\Offer;
+use App\Models\Skill;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Recruiter;
@@ -56,5 +57,7 @@ class DatabaseSeeder extends Seeder
             }
             $offer->jobPosition()->sync($jobsIds);
         }
+
+        Skill::factory(30)->create();
     }
 }
