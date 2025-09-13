@@ -39,3 +39,6 @@ export function excerpt(text?: string, limit: number = 100, separator: string = 
     return truncated + separator;
 }
 
+export const isDateExpired = (date: Date | string) => {
+    return date instanceof Date ? date : new Date(date) < new Date();
+};
