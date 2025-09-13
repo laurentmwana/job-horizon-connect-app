@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\GenderEnum;
+use App\Enums\ParticipatedStatusEnum;
 use App\Enums\ProfessionEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,6 +25,7 @@ class ParticipantFactory extends Factory
             'email' => fake()->email,
             'gender' => fake()->randomElement(GenderEnum::cases())->value,
             'profession' => fake()->randomElement(ProfessionEnum::cases())->value,
+            'status' => fake()->randomElement(ParticipatedStatusEnum::cases())->value,
         ];
     }
 }

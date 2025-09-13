@@ -78,7 +78,12 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
-        Activity::factory(20)->create();
-        Participant::factory(30)->create();
+        $activities = Activity::factory(20)->create();
+
+        foreach ($activities as $activity) {
+            Participant::factory(30)->create([
+                'activity_id' => $activity->id,
+            ]);
+        }
     }
 }

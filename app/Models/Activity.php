@@ -27,4 +27,12 @@ class Activity extends Model
         'end_at' => 'datetime',
         'type' =>  ActivityTypeEnum::class,
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Participant, Activity>
+     */
+    public function participants()
+    {
+        return $this->hasMany(Participant::class);
+    }
 }
