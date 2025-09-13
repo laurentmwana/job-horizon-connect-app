@@ -16,13 +16,15 @@ class OfferFactory extends Factory
      */
     public function definition(): array
     {
+        $startAt = now();
+
         return [
-            'image' => fake()->imageUrl(),
+            'image' => null,
             'name' => fake()->sentence(1),
             'bio' => fake()->sentence(),
             'description' => fake()->text(),
-            'start_at' => fake()->date(),
-            'end_at' => fake()->date(),
+            'start_at' => $startAt,
+            'end_at' => $startAt->addMonths(fake()->randomDigit() + 1),
         ];
     }
 }

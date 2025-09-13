@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
             for ($i=0; $i < $randomMaxJobPositions; $i++) {
                 $jobsIds[] = JobPosition::all()->random()->id;
             }
-            $offer->jobPosition()->sync($jobsIds);
+            $offer->jobPositions()->sync($jobsIds);
         }
 
         foreach (JobPosition::all() as $job) {

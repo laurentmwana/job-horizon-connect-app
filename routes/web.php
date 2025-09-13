@@ -1,8 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+Route::get('/', \App\Http\Controllers\WelcomeController::class)->name('home');
+
+// OFFER
+Route::get('/offers', [\App\Http\Controllers\Offer\OfferController::class, 'index'])
+    ->name('offer.index');
+Route::get('/offer/{id}', [\App\Http\Controllers\Offer\OfferController::class, 'show'])
+    ->name('offer.show');
+// END OFFER
