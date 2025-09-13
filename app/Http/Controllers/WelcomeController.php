@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Services\OfferService;
 
 class WelcomeController extends Controller
 {
@@ -12,6 +13,10 @@ class WelcomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return Inertia::render('welcome');
+        $offers = app(OfferService::class)->findLimit(6);
+
+        return Inertia::render('welcome', [
+            'offers' => $offers,
+        ]);
     }
 }
