@@ -31,4 +31,12 @@ class Recruiter extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Offer, Recruiter>
+     */
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
 }

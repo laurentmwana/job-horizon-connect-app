@@ -32,4 +32,12 @@ class Candidate extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Candidacy, Candidate>
+     */
+    public function candidacies()
+    {
+        return $this->hasMany(Candidacy::class);
+    }
 }
