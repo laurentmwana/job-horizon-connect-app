@@ -2,15 +2,17 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use App\Models\Offer;
+use App\Models\Skill;
 use App\Models\Activity;
 use App\Models\Candidacy;
 use App\Models\Candidate;
-use App\Models\JobPosition;
-use App\Models\Offer;
-use App\Models\Skill;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Recruiter;
+use App\Models\JobPosition;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Participant;
+use App\Models\ActivityForm;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -76,7 +78,7 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
-
         Activity::factory(20)->create();
+        Participant::factory(30)->create();
     }
 }
