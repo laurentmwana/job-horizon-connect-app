@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Activity;
 use App\Models\Candidacy;
 use App\Models\Candidate;
 use App\Models\JobPosition;
@@ -75,5 +76,7 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        Activity::factory(20)->create();
     }
 }
