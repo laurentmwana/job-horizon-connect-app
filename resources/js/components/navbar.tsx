@@ -4,6 +4,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { getInitials } from '@/lib/utils';
+import offer from '@/routes/offer';
 import type { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, LogOut, Menu, User } from 'lucide-react';
@@ -16,10 +17,10 @@ export const Navbar = () => {
     const isActive = (href: string) => baseUrl === href;
 
     const navItems = [
-        { name: 'Accueil', href: '' },
+        { name: 'Accueil', href: '/' },
         { name: 'A propos', href: '' },
         { name: 'Activités', href: '' },
-        { name: 'Offres', href: '' },
+        { name: 'Offres', href: offer.index().url },
         { name: 'Contact', href: '' },
     ];
 
