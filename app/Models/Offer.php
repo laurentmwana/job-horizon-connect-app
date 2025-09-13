@@ -42,4 +42,12 @@ class Offer extends Model
     {
         return $this->belongsToMany(JobPosition::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Candidacy, Offer>
+     */
+    public function candidacies()
+    {
+        return $this->hasMany(Candidacy::class);
+    }
 }

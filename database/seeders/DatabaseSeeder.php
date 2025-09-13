@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Candidacy;
 use App\Models\Candidate;
 use App\Models\JobPosition;
 use App\Models\Offer;
@@ -52,12 +53,11 @@ class DatabaseSeeder extends Seeder
         foreach (Offer::all() as $offer) {
             $randomMaxJobPositions = random_int(2, 3);
             $jobsIds = [];
-            for ($i=0; $i < $randomMaxJobPositions; $i++) { 
+            for ($i=0; $i < $randomMaxJobPositions; $i++) {
                 $jobsIds[] = JobPosition::all()->random()->id;
             }
             $offer->jobPosition()->sync($jobsIds);
         }
-
 
         foreach (JobPosition::all() as $job) {
             $randomMaxJSkills = random_int(2, 5);
@@ -65,7 +65,15 @@ class DatabaseSeeder extends Seeder
             Skill::factory($randomMaxJSkills)->create([
                 'job_position_id' => $job->id
             ]);
+        }
 
+        foreach (Offer::all() as $offer) {
+            foreach (Candidate::all() as $candidate) {
+                Candidacy::factory()->create([
+                    'offer_id' => $offer->id,
+                    'candidate_id' => $candidate->id
+                ]);
+            }
         }
     }
 }
