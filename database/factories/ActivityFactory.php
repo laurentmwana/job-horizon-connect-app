@@ -18,7 +18,7 @@ class ActivityFactory extends Factory
     public function definition(): array
     {
         return [
-            'image' => fake()->imageUrl(),
+            'image' => null,
             'title' => fake()->unique()->sentence(1),
             'content' => fake()->paragraph(5),
             'description' => fake()->text(),

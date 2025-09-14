@@ -35,3 +35,14 @@ export interface Skill extends DateTimeInterfaceModel {
     name: string;
     description: string;
 }
+export interface Activity extends DateTimeInterfaceModel {
+    id: string;
+    image: string | null;
+    title: string;
+    description: string;
+    start_at: string;
+    end_at: string;
+    description: string;
+    content: string;
+    type: string;
+}
