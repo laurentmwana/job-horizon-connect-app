@@ -7,6 +7,8 @@ use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Password;
+
 
 class UserService
 {
@@ -51,5 +53,16 @@ class UserService
             return $user;
         });
    
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function forgotPassword(array $data): void
+    {
+        DB::transaction(function () use ($data) {
+            Password::sendResetLink($data);
+        });
     }
 }

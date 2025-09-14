@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\NewPasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Auth\AuthenticatedController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 Route::middleware('guest')->group(function () {
     Route::get("/login",[AuthenticatedController::class, 'index'])
@@ -11,6 +13,14 @@ Route::middleware('guest')->group(function () {
     Route::post("/login",[AuthenticatedController::class, 'store']);
 
     Route::post('/register', RegisterUserController::class)->name('register');
+    Route::post('forgot-password', ForgotPasswordController::class)
+        ->name('forgot.request');
+
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->name('password.reset');
+
+    Route::post('reset-password', [NewPasswordController::class, 'store'])
+        ->name('password.store');
 });
 
 Route::middleware(['auth'])->group(function () {
