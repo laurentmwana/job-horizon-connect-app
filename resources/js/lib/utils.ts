@@ -42,3 +42,22 @@ export function excerpt(text?: string, limit: number = 100, separator: string = 
 export const isDateExpired = (date: Date | string) => {
     return date instanceof Date ? date : new Date(date) < new Date();
 };
+
+
+export const isMenuActive = (href?: string, group?: string): boolean => {
+  const pathname = window.location.pathname;
+  if (!href) return false;
+
+  // Cas : group actif
+  if (group && pathname.startsWith(group)) {
+    return true;
+  }
+
+  // Cas : home ("/")
+  if (href === "/") {
+    return pathname === "/";
+  }
+
+  // Cas : matching strict du début du pathname
+  return pathname.startsWith(href);
+};

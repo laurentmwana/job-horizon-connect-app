@@ -17,3 +17,20 @@ Route::get('/activities', [\App\Http\Controllers\Activity\ActivityController::cl
 Route::get('/activity/{id}', [\App\Http\Controllers\Activity\ActivityController::class, 'show'])
     ->name('activity.show');
 // END ACTIVITY
+
+
+// CONTACT
+Route::get('/contact', [\App\Http\Controllers\ContactController::class, 'index'])
+    ->name('contact.index');
+Route::post('/contact/send-message', [\App\Http\Controllers\ContactController::class, 'sendMessage'])
+    ->name('contact.send');
+// END CONTACT
+
+
+// PAGE
+Route::get('/about', [\App\Http\Controllers\PageController::class, 'about'])
+    ->name('page.about');
+// END PAGE
+
+require 'auth.php';
+require 'admin.php';

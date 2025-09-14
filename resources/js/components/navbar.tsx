@@ -3,26 +3,23 @@
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { getInitials } from '@/lib/utils';
-import activity from '@/routes/activity';
-import offer from '@/routes/offer';
+import { getInitials, isMenuActive } from '@/lib/utils';
 import type { SharedData } from '@/types';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { BookOpen, LogOut, Menu, User } from 'lucide-react';
 import { AppLogo } from './app-logo';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 
 export const Navbar = () => {
-    const { auth, baseUrl } = usePage<SharedData>().props;
-    const isActive = (href: string) => baseUrl === href;
+    const { auth } = usePage<SharedData>().props;
 
     const navItems = [
         { name: 'Accueil', href: '/' },
-        { name: 'A propos', href: '' },
-        { name: 'Activités', href: activity.index().url },
-        { name: 'Offres', href: offer.index().url },
-        { name: 'Contact', href: '' },
+        { name: 'A propos', href: '/about' },
+        { name: 'Activités', href: '/activities', group: '/activity' },
+        { name: 'Offres', href: '/offers', group: '/offer' },
+        { name: 'Contact', href: '/contact' },
     ];
 
     return (
@@ -39,7 +36,7 @@ export const Navbar = () => {
                                 key={item.name}
                                 href={item.href}
                                 className={`transition-colors hover:text-foreground/100 ${
-                                    isActive(item.href) ? 'font-medium text-foreground' : 'text-foreground/60'
+                                    isMenuActive(item.href, item.group) ? 'font-medium text-foreground' : 'text-foreground/60'
                                 }`}
                             >
                                 {item.name}
@@ -91,7 +88,7 @@ export const Navbar = () => {
                                             Tableau de bord
                                         </Link>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="cursor-pointer" onClick={() => {}}>
+                                    <DropdownMenuItem className="cursor-pointer" onClick={() => router.post('/logout')}>
                                         <LogOut className="mr-2 h-4 w-4" />
                                         <span>Se déconnecter</span>
                                     </DropdownMenuItem>
@@ -130,7 +127,7 @@ export const Navbar = () => {
                                                 key={item.name}
                                                 href={item.href}
                                                 className={`transition-colors hover:text-foreground/100 ${
-                                                    isActive(item.href) ? 'font-medium text-foreground' : 'text-foreground/60'
+                                                    isMenuActive(item.href, item.group) ? 'font-medium text-foreground' : 'text-foreground/60'
                                                 }`}
                                             >
                                                 {item.name}

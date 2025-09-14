@@ -2,11 +2,20 @@ export interface Auth {
     user: User;
 }
 
+export interface FlashMessage {
+    success: string | null;
+    danger: string | null;
+    error: string | null;
+    warning: string | null;
+    info: string | null;
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
     baseUrl: string;
+    flash: FlashMessage;
     [key: string]: unknown;
 }
 
