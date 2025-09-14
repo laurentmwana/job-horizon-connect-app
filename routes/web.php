@@ -31,3 +31,6 @@ Route::post('/contact/send-message', [\App\Http\Controllers\ContactController::c
 Route::get('/about', [\App\Http\Controllers\PageController::class, 'about'])
     ->name('page.about');
 // END PAGE
+
+require 'auth.php';
+require 'admin.php';
