@@ -1,6 +1,7 @@
 import { InputError } from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
@@ -36,7 +37,7 @@ export const ContactForm: React.FC = () => {
         <form className="maw-w-3xl flex flex-col gap-6 rounded-md border p-2 lg:px-4 lg:py-6" onSubmit={onSubmit} noValidate>
             <div className="grid gap-6">
                 <div className="grid gap-2">
-                    <label htmlFor="name">Nom</label>
+                    <Label htmlFor="name">Nom</Label>
                     <Input
                         id="name"
                         autoFocus
@@ -50,7 +51,7 @@ export const ContactForm: React.FC = () => {
                 </div>
 
                 <div className="grid gap-2">
-                    <label htmlFor="email">Adresse e-mail</label>
+                    <Label htmlFor="email">Adresse e-mail</Label>
                     <Input
                         id="email"
                         autoFocus
@@ -64,7 +65,7 @@ export const ContactForm: React.FC = () => {
                 </div>
 
                 <div className="grid gap-2">
-                    <label htmlFor="subject">Sujet</label>
+                    <Label htmlFor="subject">Sujet</Label>
                     <Textarea
                         id="subject"
                         required
@@ -78,7 +79,7 @@ export const ContactForm: React.FC = () => {
                 </div>
 
                 <div className="grid gap-2">
-                    <label htmlFor="message">Message</label>
+                    <Label htmlFor="message">Message</Label>
                     <Textarea
                         id="message"
                         required
