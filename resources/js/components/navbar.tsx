@@ -4,8 +4,6 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { getInitials } from '@/lib/utils';
-import activity from '@/routes/activity';
-import offer from '@/routes/offer';
 import type { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, LogOut, Menu, User } from 'lucide-react';
@@ -20,9 +18,9 @@ export const Navbar = () => {
     const navItems = [
         { name: 'Accueil', href: '/' },
         { name: 'A propos', href: '' },
-        { name: 'Activités', href: activity.index().url },
-        { name: 'Offres', href: offer.index().url },
-        { name: 'Contact', href: '' },
+        { name: 'Activités', href: '/activities' },
+        { name: 'Offres', href: '/offers' },
+        { name: 'Contact', href: '/contact' },
     ];
 
     return (
