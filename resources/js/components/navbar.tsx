@@ -3,7 +3,7 @@
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { getInitials } from '@/lib/utils';
+import { getInitials, isMenuActive } from '@/lib/utils';
 import type { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, LogOut, Menu, User } from 'lucide-react';
@@ -12,14 +12,13 @@ import { Avatar, AvatarFallback } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 
 export const Navbar = () => {
-    const { auth, baseUrl } = usePage<SharedData>().props;
-    const isActive = (href: string) => baseUrl === href;
+    const { auth } = usePage<SharedData>().props;
 
     const navItems = [
         { name: 'Accueil', href: '/' },
-        { name: 'A propos', href: '' },
-        { name: 'Activités', href: '/activities' },
-        { name: 'Offres', href: '/offers' },
+        { name: 'A propos', href: '/about' },
+        { name: 'Activités', href: '/activities', group: '/activity' },
+        { name: 'Offres', href: '/offers', group: '/offer' },
         { name: 'Contact', href: '/contact' },
     ];
 
@@ -37,7 +36,7 @@ export const Navbar = () => {
                                 key={item.name}
                                 href={item.href}
                                 className={`transition-colors hover:text-foreground/100 ${
-                                    isActive(item.href) ? 'font-medium text-foreground' : 'text-foreground/60'
+                                    isMenuActive(item.href, item.group) ? 'font-medium text-foreground' : 'text-foreground/60'
                                 }`}
                             >
                                 {item.name}
@@ -128,7 +127,7 @@ export const Navbar = () => {
                                                 key={item.name}
                                                 href={item.href}
                                                 className={`transition-colors hover:text-foreground/100 ${
-                                                    isActive(item.href) ? 'font-medium text-foreground' : 'text-foreground/60'
+                                                    isMenuActive(item.href, item.gr) ? 'font-medium text-foreground' : 'text-foreground/60'
                                                 }`}
                                             >
                                                 {item.name}
