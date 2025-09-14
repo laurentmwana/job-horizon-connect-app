@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { getInitials, isMenuActive } from '@/lib/utils';
 import type { SharedData } from '@/types';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { BookOpen, LogOut, Menu, User } from 'lucide-react';
 import { AppLogo } from './app-logo';
 import { Avatar, AvatarFallback } from './ui/avatar';
@@ -88,7 +88,7 @@ export const Navbar = () => {
                                             Tableau de bord
                                         </Link>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="cursor-pointer" onClick={() => {}}>
+                                    <DropdownMenuItem className="cursor-pointer" onClick={() => router.post('/logout')}>
                                         <LogOut className="mr-2 h-4 w-4" />
                                         <span>Se déconnecter</span>
                                     </DropdownMenuItem>
