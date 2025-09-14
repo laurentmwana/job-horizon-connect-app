@@ -5,8 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { AuthLayout } from '@/layouts/auth-layout';
+import { RegisterUserModal } from '@/shared/user/register';
 import { useForm } from '@inertiajs/react';
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 type Props = {
     status?: string;
@@ -14,6 +15,7 @@ type Props = {
 };
 
 const Page: React.FC<Props> = ({ canResetPassword, status }) => {
+    const [registerOpen, setRegisterOpen] = useState<boolean>(false);
     const { post, processing, data, setData, errors, reset } = useForm({
         identifiant: '',
         password: '',
@@ -78,18 +80,20 @@ const Page: React.FC<Props> = ({ canResetPassword, status }) => {
             <div className="mt-6 space-y-4 text-center text-sm text-muted-foreground">
                 <div>
                     Si vous n'avez pas de compte,
-                    <TextLink href="/register" className="ps-2" tabIndex={5}>
+                    <button onClick={() => setRegisterOpen(true)} className="text-link ms-2 text-sm">
                         créer un compte
-                    </TextLink>
+                    </button>
                 </div>
                 {canResetPassword && (
                     <div>
                         Avez-vous
-                        <TextLink href="" className="ml-auto text-sm" tabIndex={5}>
+                        <TextLink href="/forgot-password" className="ps-2" tabIndex={5}>
                             oublié votre mot de passe
                         </TextLink>
                     </div>
                 )}
+
+                <RegisterUserModal open={registerOpen} setOpen={setRegisterOpen} />
             </div>
         </AuthLayout>
     );

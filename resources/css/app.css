@@ -160,4 +160,8 @@
     .container {
         @apply mx-auto max-w-6xl px-2 lg:px-6;
     }
+
+    .text-link {
+        @apply text-foreground hover:decoration-current! cursor-pointer underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out dark:decoration-neutral-500;
+    }
 }
