@@ -127,7 +127,7 @@ export const Navbar = () => {
                                                 key={item.name}
                                                 href={item.href}
                                                 className={`transition-colors hover:text-foreground/100 ${
-                                                    isMenuActive(item.href, item.gr) ? 'font-medium text-foreground' : 'text-foreground/60'
+                                                    isMenuActive(item.href, item.group) ? 'font-medium text-foreground' : 'text-foreground/60'
                                                 }`}
                                             >
                                                 {item.name}
