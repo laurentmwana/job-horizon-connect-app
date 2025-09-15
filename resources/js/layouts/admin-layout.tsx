@@ -21,7 +21,7 @@ import {
 import { excerpt, getInitials, isMenuActive } from '@/lib/utils';
 import { SharedData } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import { Calendar, Home, Inbox, Users } from 'lucide-react';
+import { ArrowUp01, Calendar, Home, Inbox, Option, User, Users } from 'lucide-react';
 import { PropsWithChildren } from 'react';
 
 // Menu items.
@@ -51,6 +51,26 @@ const items = [
                 url: '/admin/activity',
                 icon: Calendar,
                 group: '/admin/activity',
+            },
+
+            {
+                title: 'Postes',
+                url: '/admin/job-position',
+                icon: ArrowUp01,
+                group: '/admin/job-position',
+            },
+
+            {
+                title: 'Candidat',
+                url: '/admin/candidate',
+                icon: User,
+                group: '/admin/candidate',
+            },
+            {
+                title: 'Candidature',
+                url: '/admin/candidacy',
+                icon: Option,
+                group: '/admin/candidacy',
             },
             {
                 title: 'Utilisateur',
