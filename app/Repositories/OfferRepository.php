@@ -57,6 +57,7 @@ class OfferRepository
      */
     private function getBaseQuery()
     {
-        return Offer::query();
+        return Offer::query()
+            ->with(['jobPositions', 'jobPositions.skills']);
     }
 }

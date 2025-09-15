@@ -66,8 +66,12 @@ class FileUploadService
      * @param string $path
      * @return bool
      */
-    public function delete(string $path): bool
+    public function delete(?string $path): bool
     {
+        if (null === $path) {
+            return false;
+        }
+
         try {
             return Storage::disk($this->disk)->delete($path);
         } catch (\Exception $e) {
