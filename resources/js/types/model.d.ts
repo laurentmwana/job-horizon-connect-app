@@ -15,14 +15,6 @@ export interface Offer extends DateTimeInterfaceModel {
     job_positions: JobPosition[];
 }
 
-export interface Recruiter extends DateTimeInterfaceModel {
-    id: string;
-    name: string;
-    firstname: string;
-    phone: string;
-    gender: string;
-}
-
 export interface JobPosition extends DateTimeInterfaceModel {
     id: string;
     name: string;

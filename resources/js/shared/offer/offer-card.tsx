@@ -6,7 +6,7 @@ import { excerpt, isDateExpired } from '@/lib/utils';
 import { local } from '@/routes/storage';
 import { Offer } from '@/types/model';
 import { router } from '@inertiajs/react';
-import { Image, InfoIcon, PenIcon } from 'lucide-react';
+import { CalendarDays, Clock, Image, InfoIcon, PenIcon } from 'lucide-react';
 import React from 'react';
 
 type OfferCollectionProps = { offer: Offer };
@@ -62,13 +62,13 @@ export const OfferDetails: React.FC<OfferDetailsProps> = ({ offer }) => {
     const isExpired = isDateExpired(offer.end_at);
 
     return (
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden pt-0">
             {/* Image */}
             <div>
                 {offer.image ? (
-                    <img src={local({ path: offer.image }).url} alt={offer.name} className="h-64 w-full object-cover" />
+                    <img src={local({ path: offer.image }).url} alt={offer.name} className="h-80 w-full object-cover" />
                 ) : (
-                    <div className="flex h-64 w-full items-center justify-center bg-accent">
+                    <div className="flex h-80 w-full items-center justify-center bg-accent">
                         <Image size={80} />
                     </div>
                 )}
@@ -80,37 +80,69 @@ export const OfferDetails: React.FC<OfferDetailsProps> = ({ offer }) => {
                     <Badge variant="secondary">
                         Du {formatDate(offer.start_at)} au {formatDate(offer.end_at)}
                     </Badge>
-                    {isExpired ? <Badge variant="destructive">Expirée</Badge> : <Badge variant="default">En cours</Badge>}
+                    {isExpired ? <Badge variant="destructive">Expirée</Badge> : <Badge variant="secondary">En cours</Badge>}
                 </div>
-                <p className="mt-1 text-sm text-muted-foreground">Publiée il y a {ago(offer.created_at)}</p>
+                <div className="flex items-center gap-4">
+                    <p className="text-xs text-muted-foreground">Publié il y a {ago(offer.created_at)}</p>
+                    <Button
+                        disabled={isExpired}
+                        size="sm"
+                        variant="link"
+                        className="flex items-center gap-2 text-xs"
+                        onClick={() => router.get(`/offer/${offer.id}/apply`)}
+                    >
+                        Postuler
+                    </Button>
+                </div>
             </CardHeader>
 
             <CardContent className="space-y-4">
-                <p className="text-base leading-relaxed">{offer.description}</p>
+                {offer.bio && <p className="text-gray-700 dark:text-gray-300">{offer.bio}</p>}
 
-                {/* Recruteur */}
-                <div className="border-t pt-4">
-                    <h3 className="text-lg font-semibold">Recruteur</h3>
-                    <p>
-                        {offer.recruiter.firstname} {offer.recruiter.name} <br />
-                        📞 {offer.recruiter.phone} | {offer.recruiter.gender === 'male' ? 'Homme' : 'Femme'}
-                    </p>
-                </div>
+                {offer.description && <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: offer.description }} />}
+            </CardContent>
+        </Card>
+    );
+};
 
-                {/* Postuler */}
-                {!isExpired && (
-                    <div className="pt-6">
-                        <Button
-                            size="lg"
-                            variant="secondary"
-                            className="flex items-center gap-2"
-                            onClick={() => router.get(`/offer/${offer.id}/apply`)}
-                        >
-                            <PenIcon size={18} />
-                            <span>Postuler</span>
-                        </Button>
+export const OfferAdminDetails: React.FC<OfferDetailsProps> = ({ offer }) => {
+    const isExpired = isDateExpired(offer.end_at);
+
+    return (
+        <Card className="overflow-hidden rounded-2xl border pt-0 shadow-md">
+            {/* Image */}
+            <div>
+                {offer.image ? (
+                    <img src={local({ path: offer.image }).url} alt={offer.name} className="h-80 w-full object-cover" />
+                ) : (
+                    <div className="flex h-80 w-full items-center justify-center bg-accent">
+                        <Image size={80} />
                     </div>
                 )}
+            </div>
+
+            <CardContent className="space-y-4 p-6">
+                <CardHeader className="p-0">
+                    <CardTitle className="mb-2 text-2xl">{offer.name}</CardTitle>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                            <CalendarDays className="h-4 w-4" />
+                            <span>{formatDate(offer.start_at)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            <span>{formatDate(offer.end_at)}</span>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <Badge variant={isExpired ? 'destructive' : 'outline'}>{isExpired ? 'Expirée' : 'En cours'}</Badge>
+                        </div>
+                    </div>
+                </CardHeader>
+
+                {offer.bio && <p className="text-gray-700 dark:text-gray-300">{offer.bio}</p>}
+
+                {offer.description && <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: offer.description }} />}
             </CardContent>
         </Card>
     );
