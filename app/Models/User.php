@@ -50,14 +50,6 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Recruiter, User>
-     */
-    public function recruiter()
-    {
-        return $this->hasOne(Recruiter::class);
-    }
-
     public function isAdmin()
     {
         return $this->role === UserRoleEnum::ADMIN->value;

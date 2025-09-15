@@ -57,7 +57,6 @@ class OfferRepository
      */
     private function getBaseQuery()
     {
-        return Offer::query()
-            ->with(['recruiter']);
+        return Offer::query();
     }
 }

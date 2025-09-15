@@ -31,15 +31,7 @@ class DatabaseSeeder extends Seeder
             'role' => UserRoleEnum::ADMIN->value,
         ]);
 
-        $recruiterUsers = User::factory(20)->create([
-            'role' => UserRoleEnum::ANONYMOUS->value,
-        ]);
-
-        foreach ($recruiterUsers as $user) {
-            Recruiter::factory()->create([
-                'user_id' => $user->id
-            ]);
-        }
+        Offer::factory(20)->create();
 
         $candidateUsers = User::factory(20)->create([
             'role' => UserRoleEnum::ANONYMOUS->value,
@@ -48,12 +40,6 @@ class DatabaseSeeder extends Seeder
         foreach ($candidateUsers as $user) {
             Candidate::factory()->create([
                 'user_id' => $user->id
-            ]);
-        }
-
-        foreach (Recruiter::all() as $recruiter) {
-            Offer::factory(2)->create([
-                'recruiter_id' => $recruiter->id
             ]);
         }
 
