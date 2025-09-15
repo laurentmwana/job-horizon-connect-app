@@ -13,6 +13,7 @@ export const RegisterUserModal: React.FC<Props> = ({ open, setOpen }) => {
     const { post, processing, data, setData, errors, reset, clearErrors } = useForm({
         name: '',
         email: '',
+        password: '',
     });
 
     const onRegister = (e: FormEvent<HTMLFormElement>) => {
@@ -20,6 +21,7 @@ export const RegisterUserModal: React.FC<Props> = ({ open, setOpen }) => {
 
         post('/register', {
             showProgress: false,
+            onFinish: () => reset('password'),
         });
     };
 
@@ -59,6 +61,19 @@ export const RegisterUserModal: React.FC<Props> = ({ open, setOpen }) => {
                                 onChange={(e) => setData('email', e.target.value)}
                             />
                             <InputError message={errors.email} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="password">Mot de passe</Label>
+                            <Input
+                                placeholder="******"
+                                id="password"
+                                type="password"
+                                value={data.password}
+                                disabled={processing}
+                                onChange={(e) => setData('password', e.target.value)}
+                            />
+                            <InputError message={errors.password} />
                         </div>
 
                         <Button disabled={processing} type="submit">

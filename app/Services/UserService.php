@@ -41,10 +41,7 @@ class UserService
     public function register(array $data): User
     {
         return DB::transaction(function () use ($data) {
-            $user = User::create([
-                ...$data,
-                'password' => Hash::make('12345678'),
-            ]);
+            $user = User::create($data);
 
             if ($user instanceof User) {
                 event(new Registered($user));
