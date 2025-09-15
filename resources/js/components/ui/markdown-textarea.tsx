@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, useCallback, useEffect } from "react"
+import { useState, useRef, useCallback } from "react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
@@ -9,17 +9,12 @@ import { cn } from "@/lib/utils"
 import {
   Bold,
   Italic,
-  LinkIcon,
-  ImageIcon,
   List,
   ListOrdered,
   Heading,
-  Code,
   Quote,
   Eye,
   Edit3,
-  Upload,
-  Paperclip,
   Maximize2,
   Minimize2,
 } from "lucide-react"
@@ -29,15 +24,12 @@ interface MarkdownTextareaProps {
   name?: string
   placeholder?: string
   defaultValue?: string
-  contentType?: "markdown" | "html" | "text" // Nouvelle prop
   className?: string
   onChange?: (value: string) => void
-  onFileUpload?: (file: File) => Promise<string>
   disabled?: boolean
   maxLength?: number
+  contentType?: "markdown" | "html" | "text" // Nouvelle prop
 }
-
-// Fonction simple pour convertir Markdown en HTML
 const parseMarkdown = (text: string): string => {
   if (!text) return ""
 
@@ -153,14 +145,13 @@ export const MarkdownTextarea = ({
   name,
   placeholder = "Écrivez votre contenu...",
   defaultValue = "",
-  contentType = "markdown", // Valeur par défaut
   className,
   onChange,
-  onFileUpload,
   disabled = false,
   maxLength,
+  contentType = 'markdown'
 }: MarkdownTextareaProps) => {
-  // Traiter le contenu initial selon son type
+
   const processInitialContent = (value: string, type: string) => {
     if (!value) return ""
 
@@ -168,26 +159,21 @@ export const MarkdownTextarea = ({
       case "html":
         return convertHtmlToMarkdown(value)
       case "text":
-        return value // Texte brut, pas de traitement
+        return value 
       case "markdown":
       default:
-        return value // Déjà en Markdown
+        return value 
     }
   }
 
   const [content, setContent] = useState(() => processInitialContent(defaultValue, contentType))
   const [activeTab, setActiveTab] = useState<"write" | "preview">("write")
-  const [isDragging, setIsDragging] = useState(false)
-  const [isUploading, setIsUploading] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value
     if (maxLength && newValue.length > maxLength) return
-
     setContent(newValue)
     onChange?.(newValue)
   }
@@ -195,193 +181,36 @@ export const MarkdownTextarea = ({
   const insertText = useCallback(
     (before: string, after = "", placeholder = "") => {
       if (!textareaRef.current || disabled) return
-
       const textarea = textareaRef.current
       const start = textarea.selectionStart
       const end = textarea.selectionEnd
-      const selectedText = content.substring(start, end)
-      const textToInsert = selectedText || placeholder
-
-      const newText = content.substring(0, start) + before + textToInsert + after + content.substring(end)
+      const selectedText = content.substring(start, end) || placeholder
+      const newText =
+        content.substring(0, start) + before + selectedText + after + content.substring(end)
 
       if (maxLength && newText.length > maxLength) return
 
       setContent(newText)
       onChange?.(newText)
 
-      // Repositionner le curseur
       setTimeout(() => {
         textarea.focus()
-        if (selectedText) {
-          const newCursorPos = start + before.length + selectedText.length + after.length
-          textarea.setSelectionRange(newCursorPos, newCursorPos)
-        } else {
-          const newStart = start + before.length
-          const newEnd = newStart + textToInsert.length
-          textarea.setSelectionRange(newStart, newEnd)
-        }
+        const newStart = start + before.length
+        const newEnd = newStart + selectedText.length
+        textarea.setSelectionRange(newStart, newEnd)
       }, 0)
     },
     [content, onChange, disabled, maxLength],
   )
 
-  // Raccourcis clavier
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (disabled) return
-
-      if (e.ctrlKey || e.metaKey) {
-        switch (e.key) {
-          case "b":
-            e.preventDefault()
-            insertText("**", "**", "texte en gras")
-            break
-          case "i":
-            e.preventDefault()
-            insertText("*", "*", "texte en italique")
-            break
-          case "k":
-            e.preventDefault()
-            insertText("[", "](url)", "texte du lien")
-            break
-          case "Enter":
-            e.preventDefault()
-            setActiveTab(activeTab === "write" ? "preview" : "write")
-            break
-          case "f":
-            e.preventDefault()
-            setIsFullscreen(!isFullscreen)
-            break
-        }
-      }
-
-      // Tab pour indentation
-      if (e.key === "Tab") {
-        e.preventDefault()
-        insertText("  ")
-      }
-    },
-    [insertText, activeTab, disabled, isFullscreen],
-  )
-
-  // Gestion du drag & drop
-  const handleDragOver = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault()
-      if (!disabled) setIsDragging(true)
-    },
-    [disabled],
-  )
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }, [])
-
-  const handleDrop = useCallback(
-    async (e: React.DragEvent) => {
-      e.preventDefault()
-      setIsDragging(false)
-
-      if (disabled || !onFileUpload) return
-
-      const files = Array.from(e.dataTransfer.files)
-      if (files.length > 0) {
-        await handleFileUpload(files[0])
-      }
-    },
-    [onFileUpload, disabled],
-  )
-
-  const handleFileUpload = async (file: File) => {
-    if (!onFileUpload || disabled) return
-
-    setIsUploading(true)
-    try {
-      const url = await onFileUpload(file)
-      if (file.type.startsWith("image/")) {
-        insertText(`![${file.name}](${url})`)
-      } else {
-        insertText(`[${file.name}](${url})`)
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'upload:", error)
-    } finally {
-      setIsUploading(false)
-    }
-  }
-
   const formatActions = [
-    {
-      icon: Bold,
-      title: "Gras",
-      action: () => insertText("**", "**", "texte en gras"),
-      shortcut: "⌘B",
-    },
-    {
-      icon: Italic,
-      title: "Italique",
-      action: () => insertText("*", "*", "texte en italique"),
-      shortcut: "⌘I",
-    },
-    {
-      icon: LinkIcon,
-      title: "Lien",
-      action: () => insertText("[", "](url)", "texte du lien"),
-      shortcut: "⌘K",
-    },
-    {
-      icon: ImageIcon,
-      title: "Image",
-      action: () => insertText("![", "](url)", "texte alternatif"),
-    },
-    {
-      icon: Heading,
-      title: "Titre",
-      action: () => insertText("## ", "", "Titre"),
-    },
-    {
-      icon: List,
-      title: "Liste à puces",
-      action: () => insertText("- ", "", "élément"),
-    },
-    {
-      icon: ListOrdered,
-      title: "Liste numérotée",
-      action: () => insertText("1. ", "", "élément"),
-    },
-    {
-      icon: Code,
-      title: "Code",
-      action: () => insertText("`", "`", "code"),
-    },
-    {
-      icon: Quote,
-      title: "Citation",
-      action: () => insertText("> ", "", "citation"),
-    },
+    { icon: Bold, title: "Gras", action: () => insertText("**", "**", "gras"), shortcut: "⌘B" },
+    { icon: Italic, title: "Italique", action: () => insertText("*", "*", "italique"), shortcut: "⌘I" },
+    { icon: Heading, title: "Titre", action: () => insertText("## ", "", "Titre") },
+    { icon: List, title: "Liste à puces", action: () => insertText("- ", "", "élément") },
+    { icon: ListOrdered, title: "Liste numérotée", action: () => insertText("1. ", "", "élément") },
+    { icon: Quote, title: "Citation", action: () => insertText("> ", "", "citation") },
   ]
-
-  // Gérer les changements de defaultValue
-  useEffect(() => {
-    if (defaultValue !== undefined) {
-      const processedContent = processInitialContent(defaultValue, contentType)
-      setContent(processedContent)
-    }
-  }, [defaultValue, contentType])
-
-  // Gérer le mode plein écran
-  useEffect(() => {
-    if (isFullscreen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "unset"
-    }
-
-    return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [isFullscreen])
 
   const containerClasses = cn(
     "bg-background border rounded-lg overflow-hidden transition-all duration-200",
@@ -392,133 +221,77 @@ export const MarkdownTextarea = ({
   const textareaHeight = isFullscreen ? "calc(100vh - 200px)" : "200px"
 
   return (
-    <div ref={containerRef} className={containerClasses}>
+    <div className={containerClasses}>
       {/* Header */}
-      <div className="border-b bg-muted/30">
-        <div className="flex items-center justify-between p-2 sm:p-3">
-          <Tabs
-            value={activeTab}
-            onValueChange={(value) => setActiveTab(value as "write" | "preview")}
-            className="flex-1"
-          >
-            <TabsList className="h-8 bg-transparent p-0 space-x-1">
-              <TabsTrigger
-                value="write"
-                className="h-7 px-2 sm:px-3 text-xs sm:text-sm data-[state=active]:bg-background"
-              >
-                <Edit3 size={14} className="mr-1" />
-                <span className="hidden sm:inline">Écrire</span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="preview"
-                className="h-7 px-2 sm:px-3 text-xs sm:text-sm data-[state=active]:bg-background"
-              >
-                <Eye size={14} className="mr-1" />
-                <span className="hidden sm:inline">Aperçu</span>
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+      <div className="border-b bg-muted/30 flex items-center justify-between p-2 sm:p-3">
+        <Tabs
+          value={activeTab}
+          onValueChange={(value) => setActiveTab(value as "write" | "preview")}
+          className="flex-1"
+        >
+          <TabsList className="h-8 bg-transparent p-0 space-x-1">
+            <TabsTrigger
+              value="write"
+              className="h-7 px-2 sm:px-3 text-xs sm:text-sm data-[state=active]:bg-background"
+            >
+              <Edit3 size={14} className="mr-1" /> Écrire
+            </TabsTrigger>
+            <TabsTrigger
+              value="preview"
+              className="h-7 px-2 sm:px-3 text-xs sm:text-sm data-[state=active]:bg-background"
+            >
+              <Eye size={14} className="mr-1" /> Aperçu
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
 
-          {/* Actions */}
-          <div className="flex items-center gap-1">
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-7 w-7 p-0"
+          onClick={() => setIsFullscreen(!isFullscreen)}
+          title={isFullscreen ? "Quitter plein écran" : "Plein écran"}
+        >
+          {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+        </Button>
+      </div>
+
+      {/* Toolbar */}
+      {activeTab === "write" && (
+        <div className="flex items-center gap-0.5 px-2 sm:px-3 pb-2 overflow-x-auto">
+          {formatActions.map((action, index) => (
             <Button
+              key={index}
               type="button"
               variant="ghost"
               size="sm"
-              className="h-7 w-7 p-0"
-              onClick={() => setIsFullscreen(!isFullscreen)}
-              title={isFullscreen ? "Quitter plein écran" : "Plein écran"}
+              title={action.title}
+              onClick={action.action}
+              disabled={disabled}
+              className="h-7 w-7 p-0 flex-shrink-0 hover:bg-muted"
             >
-              {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+              <action.icon size={14} />
+              <span className="sr-only">{action.title}</span>
             </Button>
-
-            {onFileUpload && (
-              <>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (file) handleFileUpload(file)
-                  }}
-                  accept="image/*,.pdf,.doc,.docx,.txt"
-                  disabled={disabled}
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 w-7 p-0"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isUploading || disabled}
-                  title="Joindre un fichier"
-                >
-                  {isUploading ? (
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                  ) : (
-                    <Paperclip size={14} />
-                  )}
-                </Button>
-              </>
-            )}
-          </div>
+          ))}
         </div>
+      )}
 
-        {/* Barre d'outils */}
-        {activeTab === "write" && (
-          <div className="flex items-center gap-0.5 px-2 sm:px-3 pb-2 overflow-x-auto">
-            {formatActions.map((action, index) => (
-              <Button
-                key={index}
-                type="button"
-                variant="ghost"
-                size="sm"
-                title={`${action.title} ${action.shortcut || ""}`}
-                onClick={action.action}
-                disabled={disabled}
-                className="h-7 w-7 p-0 flex-shrink-0 hover:bg-muted"
-              >
-                <action.icon size={14} />
-                <span className="sr-only">{action.title}</span>
-              </Button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Contenu */}
+      {/* Content */}
       <Tabs value={activeTab} className="w-full">
         <TabsContent value="write" className="m-0">
-          <div
-            className={cn("relative", isDragging && "bg-primary/5")}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <Textarea
-              ref={textareaRef}
-              id={id}
-              name={name}
-              placeholder={placeholder}
-              value={content}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-              disabled={disabled}
-              className="border-0 shadow-none focus-visible:ring-0 resize-none font-mono text-sm"
-              style={{ height: textareaHeight }}
-            />
-
-            {/* Overlay drag & drop */}
-            {isDragging && (
-              <div className="absolute inset-0 bg-primary/5 border-2 border-dashed border-primary/30 flex items-center justify-center">
-                <div className="text-center">
-                  <Upload className="h-8 w-8 mx-auto mb-2 text-primary" />
-                  <p className="text-sm font-medium text-primary">Déposez votre fichier ici</p>
-                </div>
-              </div>
-            )}
-          </div>
+          <Textarea
+            ref={textareaRef}
+            id={id}
+            name={name}
+            placeholder={placeholder}
+            value={content}
+            onChange={handleChange}
+            disabled={disabled}
+            className="border-0 shadow-none focus-visible:ring-0 resize-none font-mono text-sm"
+            style={{ height: textareaHeight }}
+          />
         </TabsContent>
 
         <TabsContent value="preview" className="m-0">
@@ -536,27 +309,13 @@ export const MarkdownTextarea = ({
       </Tabs>
 
       {/* Footer */}
-      <div className="border-t bg-muted/30 px-2 sm:px-3 py-2">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-2 sm:gap-4">
-            <span>Markdown</span>
-            <div className="hidden md:flex items-center gap-2">
-              <kbd className="px-1.5 py-0.5 bg-muted rounded">⌘B</kbd>
-              <span>gras</span>
-              <kbd className="px-1.5 py-0.5 bg-muted rounded">⌘I</kbd>
-              <span>italique</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {maxLength && (
-              <span className={content.length > maxLength * 0.9 ? "text-destructive" : ""}>
-                {content.length}
-                {maxLength && `/${maxLength}`}
-              </span>
-            )}
-            <kbd className="px-1.5 py-0.5 bg-muted rounded hidden sm:inline">⌘⏎</kbd>
-          </div>
-        </div>
+      <div className="border-t bg-muted/30 px-2 sm:px-3 py-2 flex items-center justify-between text-xs text-muted-foreground">
+        <span>Markdown</span>
+        {maxLength && (
+          <span className={content.length > maxLength * 0.9 ? "text-destructive" : ""}>
+            {content.length}/{maxLength}
+          </span>
+        )}
       </div>
     </div>
   )

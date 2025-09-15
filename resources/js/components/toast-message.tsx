@@ -1,5 +1,5 @@
 import { SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import React, { useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -8,8 +8,7 @@ type ToastMessageProps = {};
 export const ToastMessage: React.FC<ToastMessageProps> = ({}) => {
     const { flash: messages } = usePage<SharedData>().props;
 
-    useEffect(() => {
-        const showMessages = () => {
+      const showMessages = () => {
             if (!messages) return;
 
             if (messages.success) {
@@ -28,8 +27,10 @@ export const ToastMessage: React.FC<ToastMessageProps> = ({}) => {
                 toast.info(messages.info);
             }
         };
+
+    useEffect(() => {
         showMessages();
-    }, [messages]);
+    }, []);
 
     return null;
 };

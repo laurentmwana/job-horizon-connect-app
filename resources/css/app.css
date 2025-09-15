@@ -157,11 +157,18 @@
         @apply bg-background text-foreground;
     }
 
-    .container {
-        @apply mx-auto max-w-6xl px-2 lg:px-6;
-    }
+   
+}
 
-    .text-link {
-        @apply text-foreground hover:decoration-current! cursor-pointer underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out dark:decoration-neutral-500;
-    }
+
+ .container {
+    @apply mx-auto max-w-6xl px-2 lg:px-6;
+}
+
+.text-link {
+    @apply cursor-pointer text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500;
+}
+
+.container-sidebar {
+    @apply mb-5 flex h-full flex-1 flex-col gap-6 rounded-xl p-2 md:p-3 lg:p-6;
 }
