@@ -51,8 +51,8 @@ class ActivityRepository
         $builder = $this->getBaseQuery();
 
         return $withRelation
-            ? $builder->limit($limit)->get()
-            : Activity::query()->limit($limit)->get();
+            ? $builder->limit($limit)->orderByDesc('updated_at')->get()
+            : Activity::query()->limit($limit)->orderByDesc('updated_at')->get();
     }
 
     /**
