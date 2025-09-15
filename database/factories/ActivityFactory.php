@@ -22,8 +22,8 @@ class ActivityFactory extends Factory
             'title' => fake()->unique()->sentence(1),
             'content' => fake()->paragraph(5),
             'description' => fake()->text(),
-            'start_at' => fake()->date(),
-            'end_at' => fake()->date(),
+            'start_at' => now(),
+            'end_at' => now(),
             'type' => fake()->randomElement(ActivityTypeEnum::cases())->value,
         ];
     }

@@ -6,7 +6,7 @@ import { excerpt, isDateExpired } from '@/lib/utils';
 import { local } from '@/routes/storage';
 import { Activity } from '@/types/model';
 import { router } from '@inertiajs/react';
-import { Image, InfoIcon, PenIcon } from 'lucide-react';
+import { CalendarDays, Clock, Image, InfoIcon } from 'lucide-react';
 import React from 'react';
 
 type ActivityCollectionProps = { activity: Activity };
@@ -58,51 +58,90 @@ export const ActivityDetails: React.FC<ActivityDetailsProps> = ({ activity }) =>
     const isExpired = isDateExpired(activity.end_at);
 
     return (
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden rounded-2xl border pt-0 shadow-md">
             {/* Image */}
             <div>
                 {activity.image ? (
-                    <img src={local({ path: activity.image }).url} alt={activity.title} className="h-64 w-full object-cover" />
+                    <img src={local({ path: activity.image }).url} alt={activity.title} className="h-80 w-full object-cover" />
                 ) : (
-                    <div className="flex h-64 w-full items-center justify-center bg-accent">
+                    <div className="flex h-80 w-full items-center justify-center bg-accent">
                         <Image size={80} />
                     </div>
                 )}
             </div>
 
-            <CardHeader>
-                <CardTitle className="text-2xl font-bold">{activity.title}</CardTitle>
-                <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary">
-                        Du {formatDate(activity.start_at)} au {formatDate(activity.end_at)}
-                    </Badge>
-                    {isExpired ? <Badge variant="destructive">Expirée</Badge> : <Badge variant="default">En cours</Badge>}
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">Publiée il y a {ago(activity.created_at)}</p>
-            </CardHeader>
+            <CardContent className="space-y-4 p-6">
+                <CardHeader className="p-0">
+                    <CardTitle className="mb-2 text-2xl">{activity.title}</CardTitle>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                            <CalendarDays className="h-4 w-4" />
+                            <span>{formatDate(activity.start_at)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            <span>{formatDate(activity.end_at)}</span>
+                        </div>
 
-            <CardContent className="space-y-4">
-                <p className="text-base leading-relaxed">{activity.description}</p>
+                        <div className="flex items-center gap-4">
+                            <Badge variant="secondary">{activity.type}</Badge>
+                            <Badge variant={isExpired ? 'destructive' : 'outline'}>{isExpired ? 'Expirée' : 'En cours'}</Badge>
+                            {isExpired ? null : (
+                                <Button className="text-xs" variant="link" size="sm">
+                                    Participer
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+                </CardHeader>
 
-                {/* Recruteur */}
-                <div className="border-t pt-4">
-                    <h3 className="text-lg font-semibold">Recruteur</h3>
-                </div>
+                {activity.description && <p className="text-gray-700 dark:text-gray-300">{activity.description}</p>}
 
-                {/* Postuler */}
-                {!isExpired && (
-                    <div className="pt-6">
-                        <Button
-                            size="lg"
-                            variant="secondary"
-                            className="flex items-center gap-2"
-                            onClick={() => router.get(`/activity/${activity.id}/apply`)}
-                        >
-                            <PenIcon size={18} />
-                            <span>Postuler</span>
-                        </Button>
+                {activity.content && <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: activity.content }} />}
+            </CardContent>
+        </Card>
+    );
+};
+
+export const ActivityAdminDetails: React.FC<ActivityDetailsProps> = ({ activity }) => {
+    const isExpired = isDateExpired(activity.end_at);
+
+    return (
+        <Card className="overflow-hidden rounded-2xl border pt-0 shadow-md">
+            {/* Image */}
+            <div>
+                {activity.image ? (
+                    <img src={local({ path: activity.image }).url} alt={activity.title} className="h-80 w-full object-cover" />
+                ) : (
+                    <div className="flex h-80 w-full items-center justify-center bg-accent">
+                        <Image size={80} />
                     </div>
                 )}
+            </div>
+
+            <CardContent className="space-y-4 p-6">
+                <CardHeader className="p-0">
+                    <CardTitle className="mb-2 text-2xl">{activity.title}</CardTitle>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                            <CalendarDays className="h-4 w-4" />
+                            <span>{formatDate(activity.start_at)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            <span>{formatDate(activity.end_at)}</span>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <Badge variant="secondary">{activity.type}</Badge>
+                            <Badge variant={isExpired ? 'destructive' : 'outline'}>{isExpired ? 'Expirée' : 'En cours'}</Badge>
+                        </div>
+                    </div>
+                </CardHeader>
+
+                {activity.description && <p className="text-gray-700 dark:text-gray-300">{activity.description}</p>}
+
+                {activity.content && <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: activity.content }} />}
             </CardContent>
         </Card>
     );

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Activity\AdminActivityController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,6 @@ Route::middleware($MIDDLEWARE_ARRAY)
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+        Route::resource('activity', AdminActivityController::class)
+            ->parameter('activity', 'id');
 });

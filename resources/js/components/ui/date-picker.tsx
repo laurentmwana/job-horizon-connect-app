@@ -27,10 +27,11 @@ function formatYMD(date: Date | undefined): string {
 type DatePickerProps = {
   title: string
   value?: string
-  onChange?: (ymd: string, formatted: string) => void
+  onChange?: (ymd: string, formatted: string) => void,
+  disabled?: boolean
 }
 
-export function DatePicker({ title, value: initialValue, onChange }: DatePickerProps) {
+export function DatePicker({ title, value: initialValue, onChange, disabled = false }: DatePickerProps) {
   const [open, setOpen] = React.useState(false)
   const [date, setDate] = React.useState<Date | undefined>(
     initialValue ? new Date(initialValue) : new Date()
@@ -57,6 +58,7 @@ export function DatePicker({ title, value: initialValue, onChange }: DatePickerP
 
       <div className="relative flex gap-2">
         <Input
+        disabled={disabled}
           id="date"
           value={value}
           placeholder="June 01, 2025"
@@ -80,6 +82,7 @@ export function DatePicker({ title, value: initialValue, onChange }: DatePickerP
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
+        disabled={disabled}
               id="date-picker"
               variant="ghost"
               className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
