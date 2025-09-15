@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRoleEnum;
 use App\Models\User;
 use App\Models\Offer;
 use App\Models\Skill;
@@ -27,9 +28,12 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'role' => UserRoleEnum::ADMIN->value,
         ]);
 
-        $recruiterUsers = User::factory(20)->create();
+        $recruiterUsers = User::factory(20)->create([
+            'role' => UserRoleEnum::ANONYMOUS->value,
+        ]);
 
         foreach ($recruiterUsers as $user) {
             Recruiter::factory()->create([
@@ -37,7 +41,9 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        $candidateUsers = User::factory(20)->create();
+        $candidateUsers = User::factory(20)->create([
+            'role' => UserRoleEnum::ANONYMOUS->value,
+        ]);
 
         foreach ($candidateUsers as $user) {
             Candidate::factory()->create([

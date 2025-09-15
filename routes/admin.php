@@ -4,7 +4,7 @@ use App\Http\Controllers\Activity\AdminActivityController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-$MIDDLEWARE_ARRAY = ['auth', 'verified'];
+$MIDDLEWARE_ARRAY = ['auth', 'verified', 'admin'];
 
 Route::middleware($MIDDLEWARE_ARRAY)->group(function () {
     // ADMIN
