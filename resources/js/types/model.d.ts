@@ -26,6 +26,8 @@ export interface Skill extends DateTimeInterfaceModel {
     id: string;
     name: string;
     description: string;
+    job_position_id: string;
+    job_position: JobPosition;
 }
 export interface Activity extends DateTimeInterfaceModel {
     id: string;
