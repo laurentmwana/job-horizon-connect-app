@@ -26,11 +26,24 @@ Route::post('/contact/send-message', [\App\Http\Controllers\ContactController::c
     ->name('contact.send');
 // END CONTACT
 
+// PROFILE
+Route::get('/profile', [\App\Http\Controllers\User\ProfileController::class, 'index'])
+    ->name('profile.index');
+Route::put('/profile/edit', [\App\Http\Controllers\User\ProfileController::class, 'edit'])
+    ->name('profile.edit');
+Route::put('/profile/password', [\App\Http\Controllers\User\ProfileController::class, 'password'])
+    ->name('profile.password');
+Route::delete('/profile/destroy', [\App\Http\Controllers\User\ProfileController::class, 'destroy'])
+    ->name('profile.destroy');
+// END PROFILE
+
 
 // PAGE
 Route::get('/about', [\App\Http\Controllers\PageController::class, 'about'])
     ->name('page.about');
 // END PAGE
+
+
 
 require 'auth.php';
 require 'admin.php';
