@@ -232,13 +232,13 @@ export const MarkdownTextarea = ({
           <TabsList className="h-8 bg-transparent p-0 space-x-1">
             <TabsTrigger
               value="write"
-              className="h-7 px-2 sm:px-3 text-xs sm:text-sm data-[state=active]:bg-background"
+              className="h-7 px-2 sm:px-3 text-xs sm:text-sm data-[state=active]:bg-accent"
             >
               <Edit3 size={14} className="mr-1" /> Écrire
             </TabsTrigger>
             <TabsTrigger
               value="preview"
-              className="h-7 px-2 sm:px-3 text-xs sm:text-sm data-[state=active]:bg-background"
+              className="h-7 px-2 sm:px-3 text-xs sm:text-sm data-[state=active]:bg-accent"
             >
               <Eye size={14} className="mr-1" /> Aperçu
             </TabsTrigger>

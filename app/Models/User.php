@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserRoleEnum;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -44,14 +46,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => UserRoleEnum::class,
         ];
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Recruiter, User>
-     */
-    public function recruiter()
+    public function isAdmin()
     {
-        return $this->hasOne(Recruiter::class);
+        return $this->role === UserRoleEnum::ADMIN;
+    }
+
+    public function isAnonymous()
+    {
+        return $this->role === UserRoleEnum::ANONYMOUS;
     }
 }

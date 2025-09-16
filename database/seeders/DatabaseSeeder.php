@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRoleEnum;
 use App\Models\User;
 use App\Models\Offer;
 use App\Models\Skill;
@@ -27,27 +28,18 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'role' => UserRoleEnum::ADMIN->value,
         ]);
 
-        $recruiterUsers = User::factory(20)->create();
+        Offer::factory(20)->create();
 
-        foreach ($recruiterUsers as $user) {
-            Recruiter::factory()->create([
-                'user_id' => $user->id
-            ]);
-        }
-
-        $candidateUsers = User::factory(20)->create();
+        $candidateUsers = User::factory(20)->create([
+            'role' => UserRoleEnum::ANONYMOUS->value,
+        ]);
 
         foreach ($candidateUsers as $user) {
             Candidate::factory()->create([
                 'user_id' => $user->id
-            ]);
-        }
-
-        foreach (Recruiter::all() as $recruiter) {
-            Offer::factory(2)->create([
-                'recruiter_id' => $recruiter->id
             ]);
         }
 

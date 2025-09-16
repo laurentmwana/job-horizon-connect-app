@@ -2,7 +2,7 @@ import { AppLogo } from '@/components/app-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { ToastMessage } from '@/components/toast-message';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import {
     Sidebar,
@@ -21,14 +21,16 @@ import {
 import { excerpt, getInitials, isMenuActive } from '@/lib/utils';
 import { SharedData } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import { Calendar, Home, Inbox, Unlink, Users } from 'lucide-react';
+import { Award, Briefcase, Calendar, FileText, Home, Inbox, User, Users } from 'lucide-react';
+
 import { PropsWithChildren } from 'react';
 
 // Menu items.
+
 const items = [
     {
         title: 'Application',
-        childrens: [
+        children: [
             {
                 title: 'Tableau de bord',
                 url: '/dashboard',
@@ -38,8 +40,8 @@ const items = [
     },
 
     {
-        title: 'Gestions',
-        childrens: [
+        title: 'Gestion',
+        children: [
             {
                 title: 'Offres',
                 url: '/admin/offer',
@@ -53,13 +55,31 @@ const items = [
                 group: '/admin/activity',
             },
             {
-                title: 'Faq',
-                url: '/admin/quiz',
-                icon: Unlink,
-                group: '/admin/faq',
+                title: 'Postes',
+                url: '/admin/job-position',
+                icon: Briefcase,
+                group: '/admin/job-position',
             },
             {
-                title: 'Utilisateur',
+                title: 'Compétences',
+                url: '/admin/skill',
+                icon: Award,
+                group: '/admin/skill',
+            },
+            {
+                title: 'Candidats',
+                url: '/admin/candidate',
+                icon: User,
+                group: '/admin/candidate',
+            },
+            {
+                title: 'Candidatures',
+                url: '/admin/candidacy',
+                icon: FileText,
+                group: '/admin/candidacy',
+            },
+            {
+                title: 'Utilisateurs',
                 url: '/admin/user',
                 icon: Users,
                 group: '/admin/user',
@@ -67,6 +87,8 @@ const items = [
         ],
     },
 ];
+
+export default items;
 
 export const AdminLayout = ({ children }: PropsWithChildren) => {
     const { auth } = usePage<SharedData>().props;
@@ -92,7 +114,7 @@ export const AdminLayout = ({ children }: PropsWithChildren) => {
                             <SidebarGroup className="px-2 py-0" key={group.title}>
                                 <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
                                 <SidebarMenu>
-                                    {group.childrens.map((c) => (
+                                    {group.children.map((c) => (
                                         <SidebarMenuItem key={c.title}>
                                             <SidebarMenuButton isActive={isMenuActive(c.url)} tooltip={{ children: c.title }} asChild>
                                                 <Link href={c.url} prefetch>
@@ -111,21 +133,30 @@ export const AdminLayout = ({ children }: PropsWithChildren) => {
                 <SidebarFooter>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className="flex flex-col rounded-xl border p-2">
-                                <div className="flex items-center justify-start gap-2">
+                            <button className="flex flex-col rounded-xl border p-2 transition hover:bg-accent">
+                                <div className="flex items-center gap-2">
                                     <Avatar className="h-9 w-9">
                                         <AvatarFallback>{getInitials(auth.user.name)}</AvatarFallback>
                                     </Avatar>
 
-                                    <div className="flex flex-col gap-1 text-sm">
+                                    <div className="flex flex-col gap-0.5 text-left text-sm">
                                         <h2 className="font-medium">{excerpt(auth.user.name, 15)}</h2>
-                                        <p className="text-muted-foreground">{excerpt(auth.user.email)}</p>
+                                        <p className="text-muted-foreground">{excerpt(auth.user.email, 20)}</p>
                                     </div>
                                 </div>
                             </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Mon profil</DropdownMenuItem>
+
+                        <DropdownMenuContent align="end" className="w-56">
+                            <DropdownMenuItem asChild>
+                                <Link href="/profile">Mon profil</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/">Accueil</Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuSeparator />
+
                             <DropdownMenuItem onClick={() => router.post('/logout')}>Se déconnecter</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

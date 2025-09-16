@@ -40,7 +40,8 @@ export function excerpt(text?: string, limit: number = 100, separator: string = 
 }
 
 export const isDateExpired = (date: Date | string) => {
-    return date instanceof Date ? date : new Date(date) < new Date();
+    const newDate =  date instanceof Date ? date : new Date(date);
+    return newDate < new Date()
 };
 
 
