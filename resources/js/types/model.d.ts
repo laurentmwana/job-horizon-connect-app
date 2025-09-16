@@ -1,3 +1,5 @@
+import { User } from '.';
+
 export interface DateTimeInterfaceModel {
     created_at: string;
     updated_at: string;
@@ -39,4 +41,14 @@ export interface Activity extends DateTimeInterfaceModel {
     description: string;
     content: string;
     type: string;
+}
+
+export interface Candidate extends DateTimeInterfaceModel {
+    id: string;
+    name: string;
+    firstname: string;
+    phone: string;
+    gender: string;
+    user: User;
+    user_id: string;
 }
