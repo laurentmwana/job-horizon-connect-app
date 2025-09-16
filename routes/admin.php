@@ -4,6 +4,7 @@ use App\Http\Controllers\Activity\AdminActivityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JobPosition\AdminJobPositionController;
 use App\Http\Controllers\Offer\AdminOfferController;
+use App\Http\Controllers\Skill\AdminSkillController;
 use Illuminate\Support\Facades\Route;
 
 $MIDDLEWARE_ARRAY = ['auth', 'verified', 'admin'];
@@ -25,4 +26,6 @@ Route::middleware($MIDDLEWARE_ARRAY)
             ->parameter('offer', 'id');
         Route::resource('job-position', AdminJobPositionController::class)
             ->parameter('job-position', 'id');
+        Route::resource('skill', AdminSkillController::class)
+            ->parameter('skill', 'id');
 });
