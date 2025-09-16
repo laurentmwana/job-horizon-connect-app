@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Activity\AdminActivityController;
+use App\Http\Controllers\Candidate\AdminCandidateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JobPosition\AdminJobPositionController;
 use App\Http\Controllers\Offer\AdminOfferController;
@@ -28,4 +29,6 @@ Route::middleware($MIDDLEWARE_ARRAY)
             ->parameter('job-position', 'id');
         Route::resource('skill', AdminSkillController::class)
             ->parameter('skill', 'id');
+        Route::resource('candidate', AdminCandidateController::class)
+            ->parameter('candidate', 'id');
 });
