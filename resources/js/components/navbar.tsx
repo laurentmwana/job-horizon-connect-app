@@ -77,13 +77,13 @@ export const Navbar = () => {
                                     </div>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem asChild>
-                                        <Link href="" className="cursor-pointer">
+                                        <Link href="/profile" className="cursor-pointer">
                                             <User className="mr-2 h-4 w-4" />
                                             Mon profil
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
-                                        <Link href="" className="cursor-pointer">
+                                        <Link href="/dashboard" className="cursor-pointer">
                                             <BookOpen className="mr-2 h-4 w-4" />
                                             Tableau de bord
                                         </Link>
