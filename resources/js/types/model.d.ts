@@ -52,3 +52,14 @@ export interface Candidate extends DateTimeInterfaceModel {
     user: User;
     user_id: string;
 }
+
+export interface Candidacy extends DateTimeInterfaceModel {
+    id: string;
+    candidate: Candidate;
+    candidate_id: string;
+    offer: Offer;
+    offer_id: string;
+    status: 'refused' | 'pending' | 'canceled';
+    cv_path: string;
+    candidacy_at: string | null;
+}
