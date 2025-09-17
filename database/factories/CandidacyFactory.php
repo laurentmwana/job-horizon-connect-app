@@ -17,8 +17,11 @@ class CandidacyFactory extends Factory
      */
     public function definition(): array
     {
+        $status = fake()->randomElement(CandidacyStatusEnum::cases())->value;
+
         return [
-            'status' => fake()->randomElement(CandidacyStatusEnum::cases())->value,
+            'status' => $status,
+            'candidacy_at' => $status !== CandidacyStatusEnum::PENDING->value ? now() : null,
             'cv_path' => fake()->url(),
         ];
     }

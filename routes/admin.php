@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Activity\AdminActivityController;
-use App\Http\Controllers\Candidate\AdminCandidateController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\JobPosition\AdminJobPositionController;
 use App\Http\Controllers\Offer\AdminOfferController;
 use App\Http\Controllers\Skill\AdminSkillController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Activity\AdminActivityController;
+use App\Http\Controllers\Candidacy\AdminCandidacyController;
+use App\Http\Controllers\Candidate\AdminCandidateController;
+use App\Http\Controllers\JobPosition\AdminJobPositionController;
 
 $MIDDLEWARE_ARRAY = ['auth', 'verified', 'admin'];
 
@@ -31,4 +32,9 @@ Route::middleware($MIDDLEWARE_ARRAY)
             ->parameter('skill', 'id');
         Route::resource('candidate', AdminCandidateController::class)
             ->parameter('candidate', 'id');
+
+        Route::get('/candidacy', [AdminCandidacyController::class, 'index'])->name('candidacy.index');
+        Route::get('/candidacy/{id}', [AdminCandidacyController::class, 'show'])->name('candidacy.show');
+        Route::post('/candidacy/{id}/status', [AdminCandidacyController::class, 'changeStatus'])->name('candidacy.status');
+        Route::delete('/candidacy/{id}', [AdminCandidacyController::class, 'destroy'])->name('candidacy.destroy');
 });
