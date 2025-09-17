@@ -1,3 +1,5 @@
+import { User } from '.';
+
 export interface DateTimeInterfaceModel {
     created_at: string;
     updated_at: string;
@@ -26,6 +28,8 @@ export interface Skill extends DateTimeInterfaceModel {
     id: string;
     name: string;
     description: string;
+    job_position_id: string;
+    job_position: JobPosition;
 }
 export interface Activity extends DateTimeInterfaceModel {
     id: string;
@@ -37,4 +41,25 @@ export interface Activity extends DateTimeInterfaceModel {
     description: string;
     content: string;
     type: string;
+}
+
+export interface Candidate extends DateTimeInterfaceModel {
+    id: string;
+    name: string;
+    firstname: string;
+    phone: string;
+    gender: string;
+    user: User;
+    user_id: string;
+}
+
+export interface Candidacy extends DateTimeInterfaceModel {
+    id: string;
+    candidate: Candidate;
+    candidate_id: string;
+    offer: Offer;
+    offer_id: string;
+    status: 'refused' | 'pending' | 'canceled';
+    cv_path: string;
+    candidacy_at: string | null;
 }

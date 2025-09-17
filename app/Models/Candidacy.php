@@ -16,11 +16,13 @@ class Candidacy extends Model
         'offer_id',
         'candidate_id',
         'status',
+        'candidacy_at',
         'cv_path',
     ];
 
     protected $casts = [
         'status' => CandidacyStatusEnum::class,
+        'candidacy_at' => 'datetime'
     ];
 
     /**

@@ -1,5 +1,9 @@
 export interface Auth {
     user: User;
+    guard: {
+        is_anonymous: boolean;
+        is_admin: boolean;
+    };
 }
 
 export interface FlashMessage {

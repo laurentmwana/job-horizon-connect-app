@@ -4,8 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { AuthLayout } from '@/layouts/auth-layout';
-import { ForgotPasswordUserModal } from '@/shared/user/forogot-password';
-import { RegisterUserModal } from '@/shared/user/register';
+import { ForgotPasswordUserModal } from '@/shared/auth/forogot-password';
+import { RegisterUserModal } from '@/shared/auth/register';
 import { useForm } from '@inertiajs/react';
 import React, { FormEvent, useState } from 'react';
 
