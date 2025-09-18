@@ -15,19 +15,15 @@ class Participant extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
-        'name',
-        'firstname',
-        'email',
-        'gender',
-        'profession',
         'activity_id',
-        'status'
+        'candidate_id',
+        'status',
+        'participant_at',
     ];
 
     protected $casts = [
-        'profession' => ProfessionEnum::class,
-        'gender' => GenderEnum::class,
-        'status' => ParticipatedStatusEnum::class
+        'status' => ParticipatedStatusEnum::class,
+        'participant_at' => 'datetime',
     ];
 
     /**
@@ -36,5 +32,13 @@ class Participant extends Model
     public function activity()
     {
         return $this->belongsTo(Activity::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Candidate, Participant>
+     */
+    public function candidate()
+    {
+        return $this->belongsTo(Candidate::class);
     }
 }

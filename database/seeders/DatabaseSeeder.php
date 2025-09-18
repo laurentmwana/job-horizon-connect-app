@@ -72,10 +72,15 @@ class DatabaseSeeder extends Seeder
         }
         $activities = Activity::factory(20)->create();
 
-        foreach ($activities as $activity) {
-            Participant::factory(30)->create([
-                'activity_id' => $activity->id,
-            ]);
+        foreach (Candidate::all() as $candidate) {
+            foreach ($activities as $activity) {
+                Participant::factory()->create([
+                    'activity_id' => $activity->id,
+                    'candidate_id' => $candidate->id,
+                ]);
+            }
         }
+
+
     }
 }
