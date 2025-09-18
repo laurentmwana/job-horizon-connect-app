@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Dto\CandidateDto;
 use App\Models\Candidate;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use App\Repositories\CandidateRepository;
-use Illuminate\Support\Facades\Hash;
+use App\Enums\UserRoleEnum;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use App\Repositories\CandidateRepository;
+use App\Notifications\CandidateNotification;
 
 class CandidateService
 {
@@ -53,6 +55,30 @@ class CandidateService
                 'gender' => $dto->gender,
                 'user_id' => $user->id,
             ]);
+
+            return $candidate;
+        });
+    }
+
+    /**
+     * @param \App\Models\User $user
+     * @param \App\Dto\CandidateDto $dto
+     * @return \App\Models\Candidate
+     */
+    public function completed(User $user, CandidateDto $dto): Candidate
+    {
+        return DB::transaction(function () use ($user, $dto) {
+            $candidate = Candidate::create([
+                'name'       => $dto->name,
+                'firstname' => $dto->firstname,
+                'phone' => $dto->phone,
+                'gender' => $dto->gender,
+                'user_id' => $user->id,
+            ]);
+
+            $user->notify(new CandidateNotification($candidate));
+
+            $user->update(['role' => UserRoleEnum::CANDIDATE]);
 
             return $candidate;
         });

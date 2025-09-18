@@ -11,7 +11,7 @@ class CandidateDto
     public string $firstname;
     public string $gender;
     public string $phone;
-    public string $email;
+    public string $email = '';
 
     /**
      * @param array $data

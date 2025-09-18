@@ -8,6 +8,8 @@ enum UserRoleEnum: string
 
     case ANONYMOUS = "anonymous";
 
+    case CANDIDATE = "candidate";
+
     public static function values(): array
     {
         return array_map(
