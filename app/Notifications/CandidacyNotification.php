@@ -26,7 +26,7 @@ class CandidacyNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        $mail = new MailMessage()->replyTo($notifiable->email, $this->candidacy->candidate->name);
+        $mail = new MailMessage();
 
         switch ($this->enum) {
             case CandidacyStatusEnum::PENDING:

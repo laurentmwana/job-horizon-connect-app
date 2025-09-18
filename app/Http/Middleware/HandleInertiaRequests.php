@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Inertia\Middleware;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Inspiring;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -45,10 +46,7 @@ class HandleInertiaRequests extends Middleware
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $user,
-                'guard' => [
-                    'is_admin' => $user instanceof User ? $user->isAdmin() : false,
-                    'is_anonymous' => $user instanceof User ? $user->isAnonymous() : false,
-                ]
+                'guard' => $this->getGuard($request->user()),
             ],
             'baseUrl' => $request->getBaseUrl(),
             'flash' => [
@@ -58,6 +56,27 @@ class HandleInertiaRequests extends Middleware
                 'warning' => $request->session()->get('warning'),
                 'info' => $request->session()->get('info'),
             ],
+        ];
+    }
+
+    private function getGuard(?User $user): array
+    {
+        if (null === $user) {
+            return [
+                'is_admin' => false,
+                'is_anonymous' => false,
+                'is_candidate' => false,
+            ];
+        }
+
+        $isAdmin = $user->isAdmin();
+        $isAnonymous = $user->isAnonymous();
+        $isCandidate = $user->isCandidate();
+
+        return [
+                'is_admin' => $isAdmin,
+                'is_anonymous' => $isAnonymous,
+                'is_candidate' => $isCandidate,
         ];
     }
 }

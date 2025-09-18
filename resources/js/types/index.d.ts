@@ -1,8 +1,11 @@
+import { Candidate } from './model';
+
 export interface Auth {
     user: User;
     guard: {
         is_anonymous: boolean;
         is_admin: boolean;
+        is_candidate: boolean;
     };
 }
 
@@ -31,12 +34,8 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+    candidate: Candidate | null;
     [key: string]: unknown; // This allows for additional properties...
-}
-
-export interface CategoryUtilModel {
-    id: number;
-    name: string;
 }
 
 export interface QueryBuilderFilterModel {
