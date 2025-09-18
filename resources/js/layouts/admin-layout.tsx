@@ -79,6 +79,12 @@ const items = [
                 group: '/admin/candidacy',
             },
             {
+                title: 'Participants',
+                url: '/admin/participant',
+                icon: FileText,
+                group: '/admin/participant',
+            },
+            {
                 title: 'Utilisateurs',
                 url: '/admin/user',
                 icon: Users,
