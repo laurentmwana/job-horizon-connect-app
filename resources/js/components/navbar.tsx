@@ -82,12 +82,14 @@ export const Navbar = () => {
                                             Mon profil
                                         </Link>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard" className="cursor-pointer">
-                                            <BookOpen className="mr-2 h-4 w-4" />
-                                            Tableau de bord
-                                        </Link>
-                                    </DropdownMenuItem>
+                                    {auth.guard.is_admin && (
+                                        <DropdownMenuItem asChild>
+                                            <Link href="/dashboard" className="cursor-pointer">
+                                                <BookOpen className="mr-2 h-4 w-4" />
+                                                Tableau de bord
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    )}
                                     <DropdownMenuItem className="cursor-pointer" onClick={() => router.post('/logout')}>
                                         <LogOut className="mr-2 h-4 w-4" />
                                         <span>Se déconnecter</span>
