@@ -8,6 +8,7 @@ use App\Http\Controllers\Activity\AdminActivityController;
 use App\Http\Controllers\Candidacy\AdminCandidacyController;
 use App\Http\Controllers\Candidate\AdminCandidateController;
 use App\Http\Controllers\JobPosition\AdminJobPositionController;
+use App\Http\Controllers\Participant\AdminParticipantController;
 
 $MIDDLEWARE_ARRAY = ['auth', 'verified', 'admin'];
 
@@ -37,4 +38,9 @@ Route::middleware($MIDDLEWARE_ARRAY)
         Route::get('/candidacy/{id}', [AdminCandidacyController::class, 'show'])->name('candidacy.show');
         Route::post('/candidacy/{id}/status', [AdminCandidacyController::class, 'changeStatus'])->name('candidacy.status');
         Route::delete('/candidacy/{id}', [AdminCandidacyController::class, 'destroy'])->name('candidacy.destroy');
+
+         Route::get('/participant', [AdminParticipantController::class, 'index'])->name('participant.index');
+        Route::get('/participant/{id}', [AdminParticipantController::class, 'show'])->name('participant.show');
+        Route::post('/participant/{id}/status', [AdminParticipantController::class, 'changeStatus'])->name('participant.status');
+        Route::delete('/participant/{id}', [AdminParticipantController::class, 'destroy'])->name('participant.destroy');
 });
