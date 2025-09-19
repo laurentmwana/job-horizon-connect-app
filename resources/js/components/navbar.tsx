@@ -90,6 +90,15 @@ export const Navbar = () => {
                                             </Link>
                                         </DropdownMenuItem>
                                     )}
+
+                                    {auth.guard.is_candidate && (
+                                        <DropdownMenuItem asChild>
+                                            <Link href="/my-space" className="cursor-pointer">
+                                                <BookOpen className="mr-2 h-4 w-4" />
+                                                Mon espace
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    )}
                                     <DropdownMenuItem className="cursor-pointer" onClick={() => router.post('/logout')}>
                                         <LogOut className="mr-2 h-4 w-4" />
                                         <span>Se déconnecter</span>
