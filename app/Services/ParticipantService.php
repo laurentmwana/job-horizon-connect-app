@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Candidate;
 use App\Models\Participant;
-use App\Notifications\ParticipantNotification;
-use App\Enums\ParticipatedStatusEnum;
 use Illuminate\Support\Facades\DB;
+use App\Enums\ParticipatedStatusEnum;
 use App\Repositories\ParticipantRepository;
+use App\Notifications\ParticipantNotification;
 
 class ParticipantService
 {
@@ -29,6 +30,12 @@ class ParticipantService
     {
         return app(ParticipantRepository::class)
             ->findById($id, $withRelation);
+    }
+
+    public function findByDate(Candidate $candidate, string $year, string $month)
+    {
+        return app(ParticipantRepository::class)
+            ->findByDate($candidate, $year, $month);
     }
   
     /**

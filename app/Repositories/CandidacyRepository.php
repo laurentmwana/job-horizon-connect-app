@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Candidacy;
+use App\Models\Candidate;
 
 class CandidacyRepository
 {
@@ -16,6 +17,20 @@ class CandidacyRepository
 
         return $builder->orderByDesc('updated_at')
             ->paginate($perPage);
+    }
+
+    /**
+     * @param Candidate $candidate
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Database\Eloquent\Collection<int, Candidacy>
+     */
+    public function findByDate(Candidate $candidate, string $year, string $month)
+    {
+        return Candidacy::query()
+            ->where('candidate_id', $candidate->id)
+            ->whereLike("created_at", "%$year-$month%")
+            ->get();
     }
 
     /**

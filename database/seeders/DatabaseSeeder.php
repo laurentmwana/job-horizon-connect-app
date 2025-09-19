@@ -33,8 +33,12 @@ class DatabaseSeeder extends Seeder
 
         Offer::factory(20)->create();
 
-        $candidateUsers = User::factory(20)->create([
+        User::factory(5)->create([
             'role' => UserRoleEnum::ANONYMOUS->value,
+        ]);
+
+        $candidateUsers = User::factory(20)->create([
+            'role' => UserRoleEnum::CANDIDATE->value,
         ]);
 
         foreach ($candidateUsers as $user) {

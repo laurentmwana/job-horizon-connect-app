@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Candidate;
 use App\Models\Participant;
 
 class ParticipantRepository
@@ -29,6 +30,22 @@ class ParticipantRepository
 
         return $withRelation ? $builder->findOrFail($id) : Participant::findOrFail($id);
     }
+
+
+    /**
+     * @param \App\Models\Candidate $candidate
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Database\Eloquent\Collection<int, Participant>
+     */
+    public function findByDate(Candidate $candidate, string $year, string $month)
+    {
+        return Participant::query()
+            ->where('candidate_id', $candidate->id)
+            ->whereLike("created_at", "%$year-$month%")
+            ->get();
+    }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Builder<Participant>

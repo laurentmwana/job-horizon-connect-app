@@ -49,6 +49,14 @@ Route::middleware(['auth', 'verified', 'candidate:except'])->group(function () {
 // END CANDIDATE
 
 
+// MY SPACE
+Route::middleware(['auth', 'verified', 'candidate:required'])->group(function () {
+    Route::get('/my-space', [\App\Http\Controllers\Candidate\SpaceCondidateController::class, 'index'])
+    ->name('myspace.index');
+});
+// END MY SPACE
+
+
 // PAGE
 Route::get('/about', [\App\Http\Controllers\PageController::class, 'about'])
     ->name('page.about');

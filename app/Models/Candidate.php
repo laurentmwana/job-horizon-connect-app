@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin IdeHelperCandidate
+ */
 class Candidate extends Model
 {
     /** @use HasFactory<\Database\Factories\CandidateFactory> */
