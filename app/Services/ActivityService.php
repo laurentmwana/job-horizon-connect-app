@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\Dto\ActivityDto;
-use App\Helpers\StringHelper;
 use App\Models\Activity;
-use App\Repositories\ActivityRepository;
-use Illuminate\Support\Facades\DB;
+use App\Models\Candidate;
 use Illuminate\Support\Str;
+use App\Helpers\StringHelper;
+use Illuminate\Support\Facades\DB;
+use App\Repositories\ActivityRepository;
 
 class ActivityService
 {
@@ -20,24 +21,30 @@ class ActivityService
     {
     }
 
-    /**
-     * @param int $perPage
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function findPaginatedAndFiltered(int $perPage = 15)
-    {
-        return app(ActivityRepository::class)->findPaginatedAndFiltered($perPage);
-    }
 
     /**
-     * @param string $id
-     * @param bool $withRelation
-     * @return \App\Models\Activity
+     * @param int $perPage
+     * @param mixed $candidate
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function findById(string $id, bool $withRelation = true)
+    public function findPaginatedAndFiltered(int $perPage = 15, ?Candidate $candidate = null)
     {
         return app(ActivityRepository::class)
-            ->findById($id, $withRelation);
+            ->findPaginatedAndFiltered($perPage, $candidate);
+    }
+
+
+    /**
+     * Summary of findById
+     * @param string $id
+     * @param bool $withRelation
+     * @param Candidate|null $candidate
+     * @return Activity
+     */
+    public function findById(string $id, bool $withRelation = true, ?Candidate $candidate = null)
+    {
+        return app(ActivityRepository::class)
+            ->findById($id, $withRelation, $candidate);
     }
 
     /**
@@ -48,15 +55,17 @@ class ActivityService
         return app(ActivityRepository::class)->all($withRelation);
     }
 
+
     /**
      * @param int $limit
      * @param bool $withRelation
-     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Activity>
+     * @param mixed $candidate
+     * @return \Illuminate\Database\Eloquent\Collection<int, Activity>
      */
-    public function findLimit(int $limit, bool $withRelation = false)
+    public function findLimit(int $limit, bool $withRelation = false, ?Candidate $candidate = null)
     {
         return app(ActivityRepository::class)
-            ->findLimit($limit, $withRelation);
+            ->findLimit($limit, $withRelation, $candidate);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Activity;
 use App\Models\Candidate;
 use App\Models\Participant;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,6 @@ class ParticipantService
     {
         return app(ParticipantRepository::class)->findPaginatedAndFiltered($perPage);
     }
-
 
     /**
      * @param string $id
@@ -49,6 +49,38 @@ class ParticipantService
             $participant->update([
                 'status'  => $enum->value,
                 'participant_at' => now()
+            ]);
+
+            $participant->candidate->user->notify(
+                new ParticipantNotification($participant, $enum)
+            );
+
+            return $participant;
+        });
+    }
+
+    /**
+     * @param \App\Models\Activity $activity
+     * @param \App\Models\Candidate $candidate
+     */
+    public function create(Activity $activity, Candidate $candidate)
+    {
+        return DB::transaction(function () use ($activity, $candidate) {
+            $enum =  ParticipatedStatusEnum::PENDING;
+
+
+            $participant = Participant::where('activity_id', $activity->id)
+                ->where('status', $enum)
+                ->where('candidate_id', $candidate->id)
+                ->first();  
+
+            if ($participant) {
+                return $participant;
+            }
+
+            $participant = $activity->participants()->create([
+                'status'  => $enum,
+                'candidate_id' => $candidate->id
             ]);
 
             $participant->candidate->user->notify(
