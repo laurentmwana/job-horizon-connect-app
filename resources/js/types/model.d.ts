@@ -41,6 +41,7 @@ export interface Activity extends DateTimeInterfaceModel {
     description: string;
     content: string;
     type: string;
+    is_participated: boolean;
 }
 
 export interface Candidate extends DateTimeInterfaceModel {

@@ -1,18 +1,16 @@
 "use client"
 
-import type { PaginationData } from "@/types/paginate"
-import { Button } from "./button"
-import { router } from "@inertiajs/react"
 import { useParams } from "@/hooks/use-params"
-import { useSidebar } from "./sidebar"
+import type { PaginationData } from "@/types/paginate"
+import { router } from "@inertiajs/react"
+import { Button } from "./button"
 
 export const Pagination = ({
   items,
 }: {
-  items: PaginationData<never>
+  items: PaginationData<object>
 }) => {
   const { mergeParams } = useParams()
-  const {isMobile} = useSidebar()
 
   if (!items || (items && items.links.length < 4)) {
     return null
@@ -27,7 +25,6 @@ export const Pagination = ({
   return (
     <nav className="flex items-center flex-wrap justify-between px-4 sm:px-0 mt-6">
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-        {!isMobile && (
 
           <div>
             <p className="text-sm text-muted-foreground">
@@ -44,8 +41,6 @@ export const Pagination = ({
               )}
             </p>
           </div>
-
-        )}
 
         <div>
           <ul className="inline-flex -space-x-px text-sm gap-2">

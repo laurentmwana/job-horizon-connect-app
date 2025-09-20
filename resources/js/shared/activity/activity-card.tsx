@@ -6,8 +6,9 @@ import { excerpt, isDateExpired } from '@/lib/utils';
 import { local } from '@/routes/storage';
 import { Activity } from '@/types/model';
 import { router } from '@inertiajs/react';
-import { CalendarDays, Clock, Image, InfoIcon } from 'lucide-react';
+import { CalendarDays, Clock, Image } from 'lucide-react';
 import React from 'react';
+import { ActivityParticipatedButton } from './activivity-participated';
 
 type ActivityCollectionProps = { activity: Activity };
 
@@ -40,10 +41,10 @@ export const ActivityCollection: React.FC<ActivityCollectionProps> = ({ activity
 
             <CardFooter className="mt-auto flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                    <Button onClick={() => router.get(`/activity/${activity.id}`)} size="sm" variant="outline" className="flex items-center gap-1">
-                        <InfoIcon size={15} />
-                        <span>Détails</span>
+                    <Button onClick={() => router.get(`/activity/${activity.id}`)} size="sm" variant="link" className="flex items-center gap-1">
+                        <span>Voir</span>
                     </Button>
+                    <ActivityParticipatedButton activity={activity} />
                 </div>
 
                 {isExpired ? <Badge variant="destructive">Expirée</Badge> : <Badge variant="secondary">En cours</Badge>}
@@ -86,11 +87,7 @@ export const ActivityDetails: React.FC<ActivityDetailsProps> = ({ activity }) =>
                         <div className="flex items-center gap-4">
                             <Badge variant="secondary">{activity.type}</Badge>
                             <Badge variant={isExpired ? 'destructive' : 'outline'}>{isExpired ? 'Expirée' : 'En cours'}</Badge>
-                            {isExpired ? null : (
-                                <Button className="text-xs" variant="link" size="sm">
-                                    Participer
-                                </Button>
-                            )}
+                          <ActivityParticipatedButton activity={activity} className='text-xs' />
                         </div>
                     </div>
                 </CardHeader>
