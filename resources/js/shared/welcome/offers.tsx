@@ -1,11 +1,14 @@
 import { HeadingLarge } from '@/components/heading';
+import { User } from '@/types';
 import { Offer } from '@/types/model';
 import React from 'react';
 import { OfferCollection } from '../offer/offer-card';
 
-type Props = { offers: Offer[] };
+type Props = { offers: Offer[], user?: User };
 
-export const WelcomeOffers: React.FC<Props> = ({ offers }) => {
+export const WelcomeOffers: React.FC<Props> = ({ offers, user }) => {
+
+    
     if (offers.length === 0) return null;
 
     return (
@@ -18,7 +21,7 @@ export const WelcomeOffers: React.FC<Props> = ({ offers }) => {
             <div className="mx-auto grid max-w-5xl grid-cols-1 items-stretch gap-6 lg:grid-cols-2">
                 {offers.map((offer) => (
                     <div key={offer.id} className="h-full">
-                        <OfferCollection offer={offer} />
+                        <OfferCollection offer={offer} candidate={user ? user.candidate : null} />
                     </div>
                 ))}
             </div>

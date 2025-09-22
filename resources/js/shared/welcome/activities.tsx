@@ -19,7 +19,7 @@ export const WelcomeActivities: React.FC<Props> = ({ activities }) => {
             <div className="mx-auto grid max-w-5xl grid-cols-1 items-stretch gap-6 lg:grid-cols-2">
                 {activities.map((activity) => (
                     <div key={activity.id} className="h-full">
-                        <ActivityCollection activity={activity} />
+                        <ActivityCollection  activity={activity} />
                     </div>
                 ))}
             </div>

@@ -4,14 +4,15 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ago, formatDate } from '@/lib/date-time';
 import { excerpt, isDateExpired } from '@/lib/utils';
 import { local } from '@/routes/storage';
-import { Offer } from '@/types/model';
+import { Candidate, Offer } from '@/types/model';
 import { router } from '@inertiajs/react';
-import { CalendarDays, Clock, Image, InfoIcon, PenIcon } from 'lucide-react';
+import { CalendarDays, Clock, Image } from 'lucide-react';
 import React from 'react';
+import { OfferCandidacy } from './offer-candidacy';
 
-type OfferCollectionProps = { offer: Offer };
+type OfferCollectionProps = { offer: Offer; candidate: Candidate | null };
 
-export const OfferCollection: React.FC<OfferCollectionProps> = ({ offer }) => {
+export const OfferCollection: React.FC<OfferCollectionProps> = ({ offer, candidate }) => {
     const isExpired = isDateExpired(offer.end_at);
     return (
         <Card className="flex h-full flex-col pt-0">
@@ -40,14 +41,10 @@ export const OfferCollection: React.FC<OfferCollectionProps> = ({ offer }) => {
 
             <CardFooter className="mt-auto flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                    <Button onClick={() => router.get(`/offer/${offer.id}`)} size="sm" variant="outline" className="flex items-center gap-1">
-                        <InfoIcon size={15} />
-                        <span>Détails</span>
+                    <Button onClick={() => router.get(`/offer/${offer.id}`)} size="sm" variant="link" className="flex items-center gap-1">
+                        Voir
                     </Button>
-                    <Button size="sm" variant="secondary" className="flex items-center gap-1">
-                        <PenIcon size={15} />
-                        <span>Postuler</span>
-                    </Button>
+                    {candidate && <OfferCandidacy offer={offer} />}
                 </div>
 
                 {isExpired ? <Badge variant="destructive">Expirée</Badge> : <Badge variant="secondary">En cours</Badge>}
@@ -56,9 +53,9 @@ export const OfferCollection: React.FC<OfferCollectionProps> = ({ offer }) => {
     );
 };
 
-type OfferDetailsProps = { offer: Offer };
+type OfferDetailsProps = { offer: Offer; candidate: Candidate | null };
 
-export const OfferDetails: React.FC<OfferDetailsProps> = ({ offer }) => {
+export const OfferDetails: React.FC<OfferDetailsProps> = ({ offer, candidate }) => {
     const isExpired = isDateExpired(offer.end_at);
 
     return (
@@ -84,15 +81,7 @@ export const OfferDetails: React.FC<OfferDetailsProps> = ({ offer }) => {
                 </div>
                 <div className="flex items-center gap-4">
                     <p className="text-xs text-muted-foreground">Publié il y a {ago(offer.created_at)}</p>
-                    <Button
-                        disabled={isExpired}
-                        size="sm"
-                        variant="link"
-                        className="flex items-center gap-2 text-xs"
-                        onClick={() => router.get(`/offer/${offer.id}/apply`)}
-                    >
-                        Postuler
-                    </Button>
+                    {candidate && <OfferCandidacy offer={offer} />}
                 </div>
             </CardHeader>
 
