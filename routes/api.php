@@ -8,6 +8,7 @@ Route::prefix('enum')->group(function () {
     Route::get('genders', [BaseApiController::class, 'gender']);
     Route::get('activity-types', [BaseApiController::class, 'activityTypes']);
     Route::get('candidacy-status', [BaseApiController::class, 'candidacyStatus']);
+    Route::get('participated-status', [BaseApiController::class, 'participatedStatus']);
 });
 
 Route::prefix('data')->group(function () {

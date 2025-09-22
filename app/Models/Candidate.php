@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin IdeHelperCandidate
+ */
 class Candidate extends Model
 {
     /** @use HasFactory<\Database\Factories\CandidateFactory> */
@@ -38,5 +41,13 @@ class Candidate extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Participant, Candidate>
+     */
+    public function participants()
+    {
+        return $this->hasMany(Participant::class);
     }
 }

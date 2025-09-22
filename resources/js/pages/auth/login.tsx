@@ -72,7 +72,7 @@ const Page: React.FC = () => {
                 </div>
 
                 <Button disabled={processing} type="submit">
-                    Se connecters
+                    Se connecter
                 </Button>
             </form>
 

@@ -1,10 +1,10 @@
 import { Link } from '@inertiajs/react';
 import React from 'react';
 
-export const TABS_SELECT  = {
+export const TABS_SELECT = {
     INFO: 'info',
     CANDIDATE: 'candidate',
-}
+};
 
 type Props = { tabSelected: string };
 

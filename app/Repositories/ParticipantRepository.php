@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\Candidacy;
 use App\Models\Candidate;
+use App\Models\Participant;
 
-class CandidacyRepository
+class ParticipantRepository
 {
     /**
      * @param int $perPage
@@ -20,36 +20,38 @@ class CandidacyRepository
     }
 
     /**
-     * @param Candidate $candidate
-     * @param string $year
-     * @param string $month
-     * @return \Illuminate\Database\Eloquent\Collection<int, Candidacy>
-     */
-    public function findByDate(Candidate $candidate, string $year, string $month)
-    {
-        return Candidacy::query()
-            ->where('candidate_id', $candidate->id)
-            ->whereLike("created_at", "%$year-$month%")
-            ->get();
-    }
-
-    /**
      * @param string $id
      * @param bool $withRelation
-     * @return Candidacy
+     * @return Participant
      */
     public function findById(string $id, bool $withRelation = false)
     {
         $builder = $this->getBaseQuery();
 
-        return $withRelation ? $builder->findOrFail($id) : Candidacy::findOrFail($id);
+        return $withRelation ? $builder->findOrFail($id) : Participant::findOrFail($id);
     }
 
+
     /**
-     * @return \Illuminate\Database\Eloquent\Builder<Candidacy>
+     * @param \App\Models\Candidate $candidate
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Database\Eloquent\Collection<int, Participant>
+     */
+    public function findByDate(Candidate $candidate, string $year, string $month)
+    {
+        return Participant::query()
+            ->where('candidate_id', $candidate->id)
+            ->whereLike("created_at", "%$year-$month%")
+            ->get();
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder<Participant>
      */
     private function getBaseQuery()
     {
-        return Candidacy::query()->with(['offer', 'candidate', 'candidate.user']);
+        return Participant::query()->with(['activity', 'candidate', 'candidate.user']);
     }
 }

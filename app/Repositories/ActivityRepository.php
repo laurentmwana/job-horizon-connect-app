@@ -3,16 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\Activity;
+use App\Models\Candidate;
+use Illuminate\Database\Eloquent\Builder;
 
 class ActivityRepository
 {
-    /**
-     * @param int $perPage
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function findPaginatedAndFiltered(int $perPage)
+
+    public function findPaginatedAndFiltered(int $perPage, ?Candidate $candidate = null)
     {
-        $builder = $this->getBaseQuery();
+        $builder = $this->getBaseQuery($candidate);
 
         return $builder->orderByDesc('updated_at')
             ->paginate($perPage);
@@ -21,13 +20,22 @@ class ActivityRepository
     /**
      * @param string $id
      * @param bool $withRelation
+     * @param mixed $candidate
      * @return Activity
      */
-    public function findById(string $id, bool $withRelation = false)
+    public function findById(string $id, bool $withRelation = false,?Candidate $candidate = null)
     {
-        $builder = $this->getBaseQuery();
+        $builder = $this->getBaseQuery($candidate);
 
-        return $withRelation ? $builder->findOrFail($id) : Activity::findOrFail($id);
+        if ($withRelation) {
+            return  $builder->findOrFail($id);
+        }
+
+        $newBuilder = Activity::query();
+
+        $this->getIsParticipantQuery($newBuilder, $candidate);
+
+        return $newBuilder->findOrFail($id);
     }
 
     /**
@@ -41,26 +49,51 @@ class ActivityRepository
         return $withRelation ? $builder->get() : Activity::all();
     }
 
+  
     /**
+     * Summary of findLimit
      * @param int $limit
      * @param bool $withRelation
+     * @param mixed $candidate
      * @return \Illuminate\Database\Eloquent\Collection<int, Activity>
      */
-    public function findLimit (int $limit, bool $withRelation = false)
+    public function findLimit (int $limit, bool $withRelation = false, ?Candidate $candidate = null)
     {
-        $builder = $this->getBaseQuery();
+        $builder = $this->getBaseQuery($candidate);
 
-        return $withRelation
-            ? $builder->limit($limit)->orderByDesc('updated_at')->get()
-            : Activity::query()->limit($limit)->orderByDesc('updated_at')->get();
+        if ($withRelation) {
+            return $builder->limit($limit)->orderByDesc('updated_at')->get();
+        }
+        
+        $newBuilder = Activity::query()->limit($limit)->orderByDesc('updated_at');
+
+        $this->getIsParticipantQuery($newBuilder, $candidate);
+
+        return $newBuilder->get();
     }
 
     /**
+     * 
+     * @param mixed $candidate
      * @return \Illuminate\Database\Eloquent\Builder<Activity>
      */
-    private function getBaseQuery()
+    private function getBaseQuery(?Candidate $candidate = null)
     {
-        return Activity::query()
-            ->with(['participants']);
+        $builder = Activity::query()->with(['participants']);
+
+       $this->getIsParticipantQuery($builder, $candidate);
+
+        return $builder;
+    }
+
+    private function getIsParticipantQuery(Builder $builder, ?Candidate $candidate = null)
+    {
+        if ($candidate) {
+            $builder->withExists([
+                'participants as is_participated' => function ($query) use ($candidate) {
+                    $query->where('candidate_id', $candidate->id);
+                }
+            ]);
+        }
     }
 }

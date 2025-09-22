@@ -2,11 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use App\Dto\CandidacyDto;
+use App\Models\Candidate;
 use App\Models\Candidacy;
 use App\Notifications\CandidacyNotification;
-use Illuminate\Support\Str;
 use App\Enums\CandidacyStatusEnum;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +18,8 @@ class CandidacyService
      */
     public function findPaginatedAndFiltered(int $perPage = 15)
     {
-        return app(CandidacyRepository::class)->findPaginatedAndFiltered($perPage);
+        return app(CandidacyRepository::class)
+            ->findPaginatedAndFiltered($perPage);
     }
 
 
@@ -33,6 +32,18 @@ class CandidacyService
     {
         return app(CandidacyRepository::class)
             ->findById($id, $withRelation);
+    }
+
+    /**
+     * @param \App\Models\Candidate $candidate
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Database\Eloquent\Collection<int, Candidacy>
+     */
+    public function findByDate(Candidate $candidate, string $year, string $month)
+    {
+        return app(CandidacyRepository::class)
+            ->findByDate($candidate, $year, $month);
     }
   
     /**

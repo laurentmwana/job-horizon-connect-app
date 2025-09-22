@@ -1,20 +1,20 @@
 "use client"
 
-import type { PaginationData } from "@/types/paginate"
-import { Button } from "./button"
-import { router } from "@inertiajs/react"
 import { useParams } from "@/hooks/use-params"
+import type { PaginationData } from "@/types/paginate"
+import { router } from "@inertiajs/react"
+import { Button } from "./button"
 
 export const Pagination = ({
   items,
 }: {
-  items: PaginationData<any>
+  items: PaginationData<object>
 }) => {
+  const { mergeParams } = useParams()
+
   if (!items || (items && items.links.length < 4)) {
     return null
   }
-
-  const { mergeParams } = useParams()
 
   const handlePageChange = (url: string | null) => {
     if (url) {
@@ -23,23 +23,25 @@ export const Pagination = ({
   }
 
   return (
-    <nav className="flex items-center justify-between px-4 sm:px-0 mt-6">
+    <nav className="flex items-center flex-wrap justify-between px-4 sm:px-0 mt-6">
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">
-            {items.from && items.to ? (
-              <>
-                Affichage de <span className="font-medium">{items.from}</span> à{" "}
-                <span className="font-medium">{items.to}</span> sur <span className="font-medium">{items.total}</span>{" "}
-                résultats
-              </>
-            ) : (
-              <>
-                <span className="font-medium">{items.total}</span> résultats au total
-              </>
-            )}
-          </p>
-        </div>
+
+          <div>
+            <p className="text-sm text-muted-foreground">
+              {items.from && items.to ? (
+                <>
+                  Affichage de <span className="font-medium">{items.from}</span> à{" "}
+                  <span className="font-medium">{items.to}</span> sur <span className="font-medium">{items.total}</span>{" "}
+                  résultats
+                </>
+              ) : (
+                <>
+                  <span className="font-medium">{items.total}</span> résultats au total
+                </>
+              )}
+            </p>
+          </div>
+
         <div>
           <ul className="inline-flex -space-x-px text-sm gap-2">
             {items.links.map((link, index) => (

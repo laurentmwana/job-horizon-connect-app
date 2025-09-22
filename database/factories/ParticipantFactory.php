@@ -19,13 +19,11 @@ class ParticipantFactory extends Factory
      */
     public function definition(): array
     {
+        $status =  fake()->randomElement(ParticipatedStatusEnum::cases())->value;
+
         return [
-            'name' => fake()->name,
-            'firstname' => fake()->firstname,
-            'email' => fake()->email,
-            'gender' => fake()->randomElement(GenderEnum::cases())->value,
-            'profession' => fake()->randomElement(ProfessionEnum::cases())->value,
-            'status' => fake()->randomElement(ParticipatedStatusEnum::cases())->value,
+            'status' => $status,
+            'participant_at' => $status !== ParticipatedStatusEnum::PENDING->value ? now() : null,
         ];
     }
 }

@@ -5,12 +5,25 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
+  React.useEffect(() => {
+    const setDataLabels = () => {
+      document.querySelectorAll("table[responsive-table='true']").forEach((table) => {
+        const labels = Array.from(table.querySelectorAll("th")).map((th) => th.innerText)
+        table.querySelectorAll("td").forEach((td, index) => {
+          td.setAttribute("data-label", labels[index % labels.length])
+        })
+      })
+    }
+    setDataLabels()
+  }, [])
+
   return (
     <div
       data-slot="table-container"
       className="relative w-full overflow-x-auto"
     >
       <table
+        responsive-table="true"
         data-slot="table"
         className={cn("w-full caption-bottom text-sm", className)}
         {...props}

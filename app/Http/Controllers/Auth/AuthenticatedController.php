@@ -8,7 +8,6 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Route;
 
 class AuthenticatedController extends Controller
 {
@@ -39,7 +38,7 @@ class AuthenticatedController extends Controller
 
         if (!$user || !Hash::check($request->input('password'), $user->password)) {
             return back()->withErrors([
-                'email' => __('auth.failed'),
+                'identifiant' => __('auth.failed'),
             ]);
         }
 
