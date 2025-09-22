@@ -27,9 +27,8 @@ export const WelcomeHero: React.FC = ({}) => {
                     className="hidden sm:mb-8 sm:flex sm:justify-center"
                 >
                     <div className="relative rounded-full bg-white/50 px-3 py-1 text-sm text-gray-600 ring-1 ring-gray-900/10 backdrop-blur-sm hover:ring-gray-900/20 dark:bg-gray-800/50 dark:text-gray-300 dark:ring-gray-100/10 dark:hover:ring-gray-100/20">
-                        <span className="font-semibold">Job Horizon Connect</span> <span className="text-gray-500">-</span>{' '}
                         <Link href="/about" className="ml-1">
-                            Découvrez notre application
+                            Facilitez votre avenir professionnel.
                         </Link>
                     </div>
                 </motion.div>
@@ -54,8 +53,8 @@ export const WelcomeHero: React.FC = ({}) => {
                         transition={{ delay: 0.6 }}
                         className="mt-8 text-lg font-normal text-pretty text-gray-500 sm:text-xl dark:text-gray-400"
                     >
-                        Job Horizon Connect est une application web moderne <br />
-                        qui facilite la recherche d'emploi et la gestion des offres pour les candidats et recruteurs.
+                        Notre plateforme vous connecte aux opportunités d’emploi et aux activités de recrutement proposées par l’entreprise. Postulez,
+                        participez, évoluez.
                     </motion.p>
 
                     {/* Buttons */}
@@ -66,13 +65,13 @@ export const WelcomeHero: React.FC = ({}) => {
                         className="mt-10 flex items-center justify-center gap-x-6"
                     >
                         <Link
-                            href=""
+                            href="/offers"
                             className="inline-block rounded-xl bg-primary px-4 py-3 text-base font-medium text-primary-foreground transition-colors hover:bg-primary/90 dark:text-white/90 dark:hover:bg-primary/80"
                         >
-                            Commencer
+                            Postuler
                         </Link>
                         <Link
-                            href=""
+                            href="/about"
                             className="inline-block rounded-xl border border-primary px-4 py-3 text-base font-medium text-primary transition-colors hover:bg-primary/10 dark:hover:bg-primary/20"
                         >
                             En savoir plus <span aria-hidden="true">&rarr;</span>
