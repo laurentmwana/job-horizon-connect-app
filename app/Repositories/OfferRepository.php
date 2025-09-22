@@ -3,32 +3,41 @@
 namespace App\Repositories;
 
 use App\Models\Offer;
+use App\Models\Candidate;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class OfferRepository
 {
 
-    /**
-     * @param int $perPage
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function findPaginatedAndFiltered(int $perPage)
+    public function findPaginatedAndFiltered(int $perPage, ?Candidate $candidate = null)
     {
-        $builder = $this->getBaseQuery();
+        $builder = $this->getBaseQuery($candidate);
 
         return $builder->orderByDesc('updated_at')
             ->paginate($perPage);
     }
 
+
     /**
      * @param string $id
      * @param bool $withRelation
+     * @param mixed $candidate
      * @return Offer
      */
-    public function findById(string $id, bool $withRelation = false)
+    public function findById(string $id, bool $withRelation = false, ?Candidate $candidate = null)
     {
-        $builder = $this->getBaseQuery();
+        $builder = $this->getBaseQuery($candidate);
 
-        return $withRelation ? $builder->findOrFail($id) : Offer::findOrFail($id);
+        if ($withRelation) {
+            return $builder->findOrFail($id);
+        }
+
+        $newBuilder = Offer::query();
+
+        $this->isApplied($newBuilder, $candidate);
+
+        return $newBuilder->findOrFail($id);
     }
 
     /**
@@ -43,21 +52,48 @@ class OfferRepository
     }
 
 
-    public function findLimit (int $limit, bool $withRelation = false)
+    public function findLimit (int $limit, bool $withRelation = false, ?Candidate $candidate = null)
     {
-        $builder = $this->getBaseQuery();
- 
-        return $withRelation
-            ? $builder->limit($limit)->get()
-            : Offer::query()->limit($limit)->get();
+        $builder = $this->getBaseQuery($candidate);
+
+        if ($withRelation) {
+            return $builder->limit($limit)->get();
+        }
+
+        $newBuilder = Offer::query()->limit($limit);
+
+        $this->isApplied($newBuilder, $candidate);
+
+        return $newBuilder->get();
+    }
+
+
+    /**
+     * @param mixed $candidate
+     * @return Builder<Offer>
+     */
+    private function getBaseQuery(?Candidate $candidate = null)
+    {
+        $builder =  Offer::query()->with(['jobPositions', 'jobPositions.skills']);
+
+        $this->isApplied($builder, $candidate);
+
+        return $builder;
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder<Offer>
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param mixed $candidate
+     * @return void
      */
-    private function getBaseQuery()
+    private function isApplied(Builder $builder, ?Candidate $candidate = null)
     {
-        return Offer::query()
-            ->with(['jobPositions', 'jobPositions.skills']);
+        if ($candidate) {
+            $builder->withExists([
+                'candidacies as is_applied' => function ($query) use ($candidate) {
+                    $query->where('candidate_id', $candidate->id);
+                }
+            ]);
+        }
     }
 }

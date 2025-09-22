@@ -20,6 +20,24 @@ class ParticipantRepository
     }
 
     /**
+     * @param string $candidateId
+     * @param string $year
+     * @param string $month
+     * @param string $pageName
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function findPaginatedByCandidate(string $candidateId, string $year, string $month, string $pageName = 'page', int $perPage = 10)
+    {
+        $builder = Participant::query()->with(['activity']);
+
+        return $builder->orderByDesc('updated_at')
+            ->where('candidate_id', $candidateId)
+            ->whereLike("created_at", "%$year-$month%")
+            ->paginate($perPage, pageName: $pageName);
+    }
+
+    /**
      * @param string $id
      * @param bool $withRelation
      * @return Participant

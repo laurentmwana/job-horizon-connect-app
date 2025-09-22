@@ -19,6 +19,25 @@ class CandidacyRepository
             ->paginate($perPage);
     }
 
+
+    /**
+     * @param string $candidateId
+     * @param string $year
+     * @param string $month
+     * @param string $pageName
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function findPaginatedByCandidate(string $candidateId, string $year, string $month, string $pageName = 'page', int $perPage = 10)
+    {
+        $builder = Candidacy::query()->with(['offer']);
+
+        return $builder->orderByDesc('updated_at')
+            ->where('candidate_id', $candidateId)
+            ->whereLike("created_at", "%$year-$month%")
+            ->paginate($perPage, pageName: $pageName);
+    }
+
     /**
      * @param Candidate $candidate
      * @param string $year

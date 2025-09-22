@@ -19,7 +19,6 @@ class SpaceCondidateController extends Controller
     public function index(Request $request)
     {
         [$year, $month] = $this->getFilters($request);
-
         $user = $request->user();
 
         return Inertia::render('my-space/index', [
@@ -28,9 +27,18 @@ class SpaceCondidateController extends Controller
                 'participants' => $this->getStatParticipants($user->candidate, $year, $month),
                 'candidacies'  => $this->getStatCandidacies($user->candidate, $year, $month),
             ],
+            'candidacies' => $this->getStatDetailsCandidacies($user->candidate->id, $year, $month),
+            'participants' => $this->getStatDetailsParticipants($user->candidate->id, $year, $month),
         ]);
     }
 
+
+    /**
+     * @param \App\Models\Candidate $candidate
+     * @param string $year
+     * @param string $month
+     * @return array
+     */
     private function getStatCandidacies(Candidate $candidate, string $year, string $month): array
     {
         return $this->countStatuses(
@@ -39,6 +47,12 @@ class SpaceCondidateController extends Controller
         );
     }
 
+    /**
+     * @param \App\Models\Candidate $candidate
+     * @param string $year
+     * @param string $month
+     * @return array
+     */
     private function getStatParticipants(Candidate $candidate, string $year, string $month): array
     {
         return $this->countStatuses(
@@ -47,7 +61,11 @@ class SpaceCondidateController extends Controller
         );
     }
 
-
+    /**
+     * @param iterable $items
+     * @param string $enumClass
+     * @return array
+     */
     private function countStatuses(iterable $items, string $enumClass): array
     {
         $accepted = $refused = $pending = 0;
@@ -64,8 +82,11 @@ class SpaceCondidateController extends Controller
 
         return compact('pending', 'refused', 'accepted');
     }
-
   
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return string[]
+     */
     private function getFilters(Request $request): array
     {
         $year = (string) $request->query('year', now()->format('Y'));
@@ -80,5 +101,29 @@ class SpaceCondidateController extends Controller
         }
 
         return [$year, $month];
+    }
+
+    /**
+     * @param string $candidateId
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    private function getStatDetailsCandidacies(string $candidateId, string $year, string $month)
+    {
+        return app(CandidacyService::class)
+            ->findPaginatedByCandidate($candidateId, $year, $month, 'c-page', 10);
+    }
+
+    /**
+     * @param string $candidateId
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    private function getStatDetailsParticipants(string $candidateId, string $year, string $month)
+    {
+        return app(ParticipantService::class)
+            ->findPaginatedByCandidate($candidateId, $year, $month, 'p-page', 10);
     }
 }
