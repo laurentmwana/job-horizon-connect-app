@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Builder;
 class OfferRepository
 {
 
+    /**
+     * @param int $perPage
+     * @param mixed $candidate
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
     public function findPaginatedAndFiltered(int $perPage, ?Candidate $candidate = null)
     {
         $builder = $this->getBaseQuery($candidate);
@@ -17,7 +22,6 @@ class OfferRepository
         return $builder->orderByDesc('updated_at')
             ->paginate($perPage);
     }
-
 
     /**
      * @param string $id
