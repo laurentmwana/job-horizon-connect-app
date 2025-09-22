@@ -22,6 +22,20 @@ class ParticipantService
     }
 
     /**
+     * @param string $candidateId
+     * @param string $year
+     * @param string $month
+     * @param string $pageName
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function findPaginatedByCandidate(string $candidateId, string $year, string $month, string $pageName = 'page', int $perPage = 15)
+    {
+        return app(ParticipantRepository::class)
+            ->findPaginatedByCandidate($candidateId, $year, $month, $pageName, $perPage);
+    }
+
+    /**
      * @param string $id
      * @param bool $withRelation
      * @return \App\Models\Participant
@@ -32,6 +46,12 @@ class ParticipantService
             ->findById($id, $withRelation);
     }
 
+    /**
+     * @param \App\Models\Candidate $candidate
+     * @param string $year
+     * @param string $month
+     * @return \Illuminate\Database\Eloquent\Collection<int, Participant>
+     */
     public function findByDate(Candidate $candidate, string $year, string $month)
     {
         return app(ParticipantRepository::class)
@@ -67,7 +87,6 @@ class ParticipantService
     {
         return DB::transaction(function () use ($activity, $candidate) {
             $enum =  ParticipatedStatusEnum::PENDING;
-
 
             $participant = Participant::where('activity_id', $activity->id)
                 ->where('status', $enum)

@@ -2,14 +2,16 @@ import { Heading } from '@/components/heading';
 import { Pagination } from '@/components/ui/pagination';
 import { BaseLayout } from '@/layouts/base-layout';
 import { OfferCollection } from '@/shared/offer/offer-card';
+import { SharedData } from '@/types';
 import { Offer } from '@/types/model';
 import { PaginationData } from '@/types/paginate';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import React from 'react';
 
 type Props = { offers: PaginationData<Offer> };
 
 const Page: React.FC<Props> = ({ offers }) => {
+    const { auth } = usePage<SharedData>().props;
     return (
         <BaseLayout>
             <Head title="Liste des offres" />
@@ -20,7 +22,7 @@ const Page: React.FC<Props> = ({ offers }) => {
                 <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {offers.data.map((offer) => (
                         <div key={offer.id} className="h-full">
-                            <OfferCollection offer={offer} />
+                            <OfferCollection candidate={auth.user.candidate} offer={offer} />
                         </div>
                     ))}
                 </div>

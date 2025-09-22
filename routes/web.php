@@ -14,6 +14,9 @@ Route::get('/offers', [\App\Http\Controllers\Offer\OfferController::class, 'inde
     ->name('offer.index');
 Route::get('/offer/{id}', [\App\Http\Controllers\Offer\OfferController::class, 'show'])
     ->name('offer.show');
+Route::post('/offer/{id}/applied', [\App\Http\Controllers\Offer\OfferController::class, 'applied'])
+    ->middleware($MIDDLEWARE_CANDIDATE_REQUIRED)
+    ->name('offer.applied');
 // END OFFER
 
 // ACTIVITY
@@ -21,7 +24,6 @@ Route::get('/activities', [\App\Http\Controllers\Activity\ActivityController::cl
     ->name('activity.index');
 Route::get('/activity/{id}', [\App\Http\Controllers\Activity\ActivityController::class, 'show'])
     ->name('activity.show');
-
 Route::post('/activity/{id}/participated', [\App\Http\Controllers\Activity\ActivityController::class, 'participated'])
     ->middleware($MIDDLEWARE_CANDIDATE_REQUIRED)
     ->name('activity.participated');
@@ -52,7 +54,7 @@ Route::middleware($MIDDLEWARE_CANDIDATE_EXCEPT)->group(function () {
     Route::get('/candidate', [\App\Http\Controllers\Candidate\CandidateController::class, 'index'])
     ->name('candidate.index');
     Route::post('/candidate', [\App\Http\Controllers\Candidate\CandidateController::class, 'store'])
-        ->name('candidate.store'); 
+        ->name('candidate.store');
 });
 // END CANDIDATE
 

@@ -17,9 +17,9 @@ class WelcomeController extends Controller
         $user = $request->user();
         $candidate = $user ? $user->candidate : null;
 
-        $offers = app(OfferService::class)->findLimit(6);
+        $offers = app(OfferService::class)->findLimit(6, candidate: $candidate);
         $activities = app(ActivityService::class)->findLimit(8, candidate: $candidate);
-
+ 
         return Inertia::render('welcome', [
             'offers' => $offers,
             'activities' => $activities,

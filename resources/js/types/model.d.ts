@@ -13,6 +13,7 @@ export interface Offer extends DateTimeInterfaceModel {
     start_at: string;
     end_at: string;
     description: string;
+    is_applied: boolean;
     recruiter: Recruiter;
     job_positions: JobPosition[];
 }
@@ -60,6 +61,7 @@ export interface Candidacy extends DateTimeInterfaceModel {
     candidate_id: string;
     offer: Offer;
     offer_id: string;
+    is_applied: boolean;
     status: 'refused' | 'pending' | 'canceled';
     cv_path: string;
     candidacy_at: string | null;

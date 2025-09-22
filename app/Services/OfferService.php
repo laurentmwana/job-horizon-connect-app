@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dto\OfferDto;
 use App\Models\Offer;
+use App\Models\Candidate;
 use App\Helpers\StringHelper;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\OfferRepository;
@@ -29,12 +30,13 @@ class OfferService
     /**
      * @param string $id
      * @param bool $withRelation
-     * @return \App\Models\Offer
+     * @param mixed $candidate
+     * @return Offer
      */
-    public function findById(string $id, bool $withRelation = true)
+    public function findById(string $id, bool $withRelation = true, ?Candidate $candidate = null)
     {
         return app(OfferRepository::class)
-            ->findById($id, $withRelation);
+            ->findById($id, $withRelation, $candidate);
     }
 
     /**
@@ -45,15 +47,17 @@ class OfferService
         return app(OfferRepository::class)->all($withRelation);
     }
 
+ 
     /**
      * @param int $limit
      * @param bool $withRelation
-     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Offer>
+     * @param mixed $candidate
+     * @return \Illuminate\Database\Eloquent\Collection<int, Offer>
      */
-    public function findLimit(int $limit, bool $withRelation = false)
+    public function findLimit(int $limit, bool $withRelation = false, ?Candidate $candidate = null)
     {
         return app(OfferRepository::class)
-            ->findLimit($limit, $withRelation);
+            ->findLimit($limit, $withRelation, $candidate);
     }
 
     
