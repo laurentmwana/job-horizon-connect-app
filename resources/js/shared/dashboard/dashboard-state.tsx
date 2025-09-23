@@ -12,40 +12,38 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ countActivities,
         {
             title: 'Activités',
             value: countActivities,
-            description: 'les activités...',
+            description: 'Les activités enregistrées.',
         },
         {
             title: 'Offres',
             value: countOffers,
-            description: 'les offres...',
+            description: 'Les offres publiées.',
         },
         {
             title: 'Candidats',
             value: countCandidates,
-            description: 'Les candidats...',
+            description: 'Les candidats inscrits.',
         },
     ];
 
     return (
-        <div>
+        <div aria-label="Statistiques du tableau de bord">
             <div className="grid gap-4 md:grid-cols-3">
-                {stats.map((stat, index) => {
-                    return (
-                        <Card key={index} className="relative">
-                            <CardHeader>
-                                <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <div className="text-2xl font-bold">{stat.value.toLocaleString()}</div>
-                                        <p className="text-xs text-muted-foreground">{stat.description}</p>
-                                    </div>
+                {stats.map((stat, index) => (
+                    <Card key={index} className="relative">
+                        <CardHeader>
+                            <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-2xl font-bold">{stat.value.toLocaleString()}</div>
+                                    <p className="text-xs text-muted-foreground">{stat.description}</p>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    );
-                })}
+                            </div>
+                        </CardContent>
+                    </Card>
+                ))}
             </div>
         </div>
     );

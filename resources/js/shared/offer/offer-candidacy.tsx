@@ -8,7 +8,10 @@ import { Offer } from '@/types/model';
 import { useForm } from '@inertiajs/react';
 import React, { FormEventHandler, useState } from 'react';
 
-type Props = { offer: Offer; className?: string };
+type Props = {
+    offer: Offer;
+    className?: string;
+};
 
 type OfferCandidacyForm = {
     cv_path: File | null;
@@ -16,7 +19,7 @@ type OfferCandidacyForm = {
 
 export const OfferCandidacy: React.FC<Props> = ({ offer, className }) => {
     const isExpired = isDateExpired(offer.end_at);
-    const [open, setOpen] = useState<boolean>(false);
+    const [open, setOpen] = useState(false);
 
     const { post, processing, reset, clearErrors, setData, errors } = useForm<OfferCandidacyForm>({
         cv_path: null,
@@ -26,9 +29,7 @@ export const OfferCandidacy: React.FC<Props> = ({ offer, className }) => {
 
     const onChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file) {
-            setData('cv_path', file);
-        }
+        if (file) setData('cv_path', file);
     };
 
     const handleSubmit: FormEventHandler = (e) => {
@@ -36,10 +37,9 @@ export const OfferCandidacy: React.FC<Props> = ({ offer, className }) => {
 
         post(`/offer/${offer.id}/applied`, {
             preserveScroll: true,
-            onSuccess: () => {
-                closeModal();
-            },
+            onSuccess: closeModal,
             onFinish: () => reset(),
+            forceFormData: true,
         });
     };
 
@@ -52,20 +52,21 @@ export const OfferCandidacy: React.FC<Props> = ({ offer, className }) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className={className} variant="link" disabled={isExpired || offer.is_applied}>
+                <Button className={className} variant="ghost" disabled={isExpired || offer.is_applied} aria-disabled={isExpired || offer.is_applied}>
                     {offer.is_applied ? 'Postulé' : 'Postuler'}
                 </Button>
             </DialogTrigger>
             <DialogContent>
-                <DialogTitle>Êtes-vous sûr de vouloir continuer ?</DialogTitle>
-                <DialogDescription>Cette action est irréversible. Veuillez entrer votre mot de passe pour confirmer.</DialogDescription>
+                <DialogTitle>Confirmer votre candidature</DialogTitle>
+                <DialogDescription>Cette action est irréversible. Veuillez téléverser votre CV pour confirmer votre candidature.</DialogDescription>
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-6" onSubmit={handleSubmit} encType="multipart/form-data" noValidate>
                     <div className="grid gap-2">
-                        <Label> CV</Label>
-                        <Input type="file" onChange={onChangeFile} placeholder="Téléversever votre cv" />
+                        <Label htmlFor="cv_path">CV</Label>
+                        <Input id="cv_path" type="file" onChange={onChangeFile} required aria-invalid={!!errors.cv_path} />
                         <InputError message={errors.cv_path} />
                     </div>
+
                     <DialogFooter className="gap-2">
                         <DialogClose asChild>
                             <Button variant="secondary" onClick={closeModal}>
@@ -73,8 +74,8 @@ export const OfferCandidacy: React.FC<Props> = ({ offer, className }) => {
                             </Button>
                         </DialogClose>
 
-                        <Button variant="default" disabled={processing} type="submit">
-                            {processing ? 'Mise à jour...' : 'Effectuer'}
+                        <Button variant="default" type="submit" disabled={processing} aria-disabled={processing}>
+                            {processing ? 'Envoi en cours...' : 'Confirmer'}
                         </Button>
                     </DialogFooter>
                 </form>

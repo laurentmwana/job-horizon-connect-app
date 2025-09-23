@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { ChipsSelector } from '@/components/ui/chips';
 import { Label } from '@/components/ui/label';
@@ -29,19 +31,12 @@ type Props = {
 };
 
 export const SpaceFilters: React.FC<Props> = ({ url, filters }) => {
-    
-    const { data, setData, processing, get } = useForm({
+    const { data, setData, processing, get } = useForm<FilterYearMonth>({
         year: filters.year,
         month: filters.month,
     });
 
-    const years = () => {
-        const years = [YEAR_START];
-        for (let index = 1; index <= YEAR_INTERVAL; index++) {
-            years.push(YEAR_START - index);
-        }
-        return years;
-    };
+    const years = Array.from({ length: YEAR_INTERVAL + 1 }, (_, i) => (YEAR_START - i).toString());
 
     const onFilters = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -56,10 +51,10 @@ export const SpaceFilters: React.FC<Props> = ({ url, filters }) => {
                     <Label htmlFor="year">Année</Label>
                     <ChipsSelector
                         clearable={false}
-                        items={years().map((year) => ({
-                            id: year.toString(),
-                            value: year.toString(),
-                            label: year.toString(),
+                        items={years.map((year) => ({
+                            id: year,
+                            value: year,
+                            label: year,
                         }))}
                         mode="single"
                         selectedValues={data.year}
@@ -76,11 +71,10 @@ export const SpaceFilters: React.FC<Props> = ({ url, filters }) => {
                     <Label htmlFor="month">Mois</Label>
                     <ChipsSelector
                         clearable={false}
-                        items={Object.entries(months).map(([key, value]) => ({
+                        items={Object.entries(months).map(([key, label]) => ({
                             id: key,
                             value: key,
-                            label: value,
-                            disabled: data.month === key,
+                            label,
                         }))}
                         mode="single"
                         selectedValues={data.month}
@@ -93,8 +87,8 @@ export const SpaceFilters: React.FC<Props> = ({ url, filters }) => {
                 </div>
 
                 {/* Bouton Filtrer */}
-                <div className='mt-4'>
-                    <Button  type="submit" disabled={processing}>
+                <div className="mt-4">
+                    <Button type="submit" disabled={processing}>
                         {processing ? 'Chargement...' : 'Appliquer'}
                     </Button>
                 </div>

@@ -11,7 +11,11 @@ import { SpacePiechartStats } from '@/types/filter';
 
 type Status = 'accepted' | 'refused' | 'pending';
 
-type Item = { status: Status; value: number; fill: string }
+type Item = {
+    status: Status;
+    value: number;
+    fill: string;
+};
 
 type Props = {
     title: string;
@@ -28,13 +32,14 @@ const chartConfig = {
 export const SpacePiechart: React.FC<Props> = ({ title, description, stats }) => {
     const id = 'pie-interactive';
 
-    const data = React.useMemo<Item[]>(() => {
-        return [
+    const data = React.useMemo<Item[]>(
+        () => [
             { status: 'refused', value: stats.refused, fill: 'var(--color-refused)' },
             { status: 'accepted', value: stats.accepted, fill: 'var(--color-accepted)' },
             { status: 'pending', value: stats.pending, fill: 'var(--color-pending)' },
-        ]
-    }, [stats])
+        ],
+        [stats],
+    );
 
     const [activeStatus, setActiveStatus] = React.useState<Status>(data[0].status);
 
@@ -46,7 +51,7 @@ export const SpacePiechart: React.FC<Props> = ({ title, description, stats }) =>
         <Card data-chart={id} className="flex flex-col">
             <ChartStyle id={id} config={chartConfig} />
 
-            <CardHeader className="flex-row items-start space-y-0 pb-0">
+            <CardHeader className="flex-row items-start justify-between space-y-0 pb-0">
                 <div className="grid gap-1">
                     <CardTitle>{title}</CardTitle>
                     {description && <CardDescription>{description}</CardDescription>}
@@ -90,12 +95,15 @@ export const SpacePiechart: React.FC<Props> = ({ title, description, stats }) =>
                                     if (!viewBox || !('cx' in viewBox) || !('cy' in viewBox)) return null;
 
                                     const { value, status } = data[activeIndex];
+                                    const cx = viewBox.cx as number;
+                                    const cy = viewBox.cy as number;
+
                                     return (
-                                        <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                                            <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-3xl font-bold">
+                                        <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
+                                            <tspan x={cx} y={cy} className="fill-foreground text-3xl font-bold">
                                                 {value.toLocaleString()}
                                             </tspan>
-                                            <tspan x={viewBox.cx} y={(viewBox.cy as number) + 24} className="fill-muted-foreground">
+                                            <tspan x={cx} y={cy + 24} className="fill-muted-foreground">
                                                 {chartConfig[status].label}
                                             </tspan>
                                         </text>
