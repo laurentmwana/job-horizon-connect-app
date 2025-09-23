@@ -6,17 +6,20 @@ import React from 'react';
 
 const title = "Création d'un poste";
 
-type Props = {};
-
-const Page: React.FC<Props> = () => {
+const Page: React.FC = () => {
     return (
         <AdminLayout>
             <Head title={title} />
-            <Heading title={title}>Ajouter une activité pour facilement les activités publiées dans la plateforme...</Heading>
-            <div className="max-w-5xl">
-                <JobPositionForm />
+            <div className="container py-12" aria-label="Formulaire de création de poste">
+                <Heading title={title}>
+                    Ajoutez un nouveau poste pour enrichir l’offre de recrutement et faciliter la gestion des candidatures.
+                </Heading>
+                <div className="max-w-5xl">
+                    <JobPositionForm />
+                </div>
             </div>
         </AdminLayout>
     );
 };
+
 export default Page;
