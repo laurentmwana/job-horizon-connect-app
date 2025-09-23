@@ -36,6 +36,15 @@ class CandidateService
     }
 
     /**
+     * @param string $offerId
+     * @return \Illuminate\Database\Eloquent\Collection<int, Candidate>
+     */
+    public function findByOffer(string $offerId)
+    {
+        return app(CandidateRepository::class)->findByOffer($offerId);
+    }
+
+    /**
      * @param \App\Dto\CandidateDto $dto
      * @return \App\Models\JobPosition
      */

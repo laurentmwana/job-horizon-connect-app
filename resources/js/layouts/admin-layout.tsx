@@ -21,11 +21,13 @@ import {
 import { excerpt, getInitials, isMenuActive } from '@/lib/utils';
 import { SharedData } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import { Award, Briefcase, Calendar, FileText, Home, Inbox, User, Users } from 'lucide-react';
+import { Award, Briefcase, Calendar, FileText, User, Users } from 'lucide-react';
 
 import { PropsWithChildren } from 'react';
 
 // Menu items.
+
+import { FileStack, LayoutDashboard, Package, Shield } from 'lucide-react';
 
 const items = [
     {
@@ -34,7 +36,7 @@ const items = [
             {
                 title: 'Tableau de bord',
                 url: '/dashboard',
-                icon: Home,
+                icon: LayoutDashboard,
             },
         ],
     },
@@ -45,7 +47,7 @@ const items = [
             {
                 title: 'Offres',
                 url: '/admin/offer',
-                icon: Inbox,
+                icon: Package,
                 group: '/admin/offer',
             },
             {
@@ -81,14 +83,31 @@ const items = [
             {
                 title: 'Participants',
                 url: '/admin/participant',
-                icon: FileText,
+                icon: Users,
                 group: '/admin/participant',
             },
             {
                 title: 'Utilisateurs',
                 url: '/admin/user',
-                icon: Users,
+                icon: Shield,
                 group: '/admin/user',
+            },
+        ],
+    },
+
+    {
+        title: 'Documents générés',
+        children: [
+            {
+                title: 'Candidatures PDF',
+                url: '/admin/generate/candidacies',
+                icon: FileStack,
+            },
+            {
+                title: 'Participants PDF',
+                url: '/admin/generate/participants',
+                icon: FileStack,
+                group: '/admin/generate/participants',
             },
         ],
     },
