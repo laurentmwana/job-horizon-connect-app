@@ -1,6 +1,6 @@
 import { Heading } from '@/components/heading';
 import { AdminLayout } from '@/layouts/admin-layout';
-import { CandidatelAdminDetails } from '@/shared/candidate/candidate-card';
+import { CandidateAdminDetails } from '@/shared/candidate/candidate-card';
 import { Candidate } from '@/types/model';
 import { Head } from '@inertiajs/react';
 import React from 'react';
@@ -16,12 +16,15 @@ const Page: React.FC<Props> = ({ candidate }) => {
         <AdminLayout>
             <Head title={title} />
 
-            <div className="container py-12">
-                <Heading title={title}>Découvrez tous les détails et participez en quelques clics.</Heading>
+            <div className="container py-12" aria-label="Détails administratifs du profil candidat">
+                <Heading title={title}>
+                    Consultez les informations complètes liées à ce profil candidat pour faciliter son évaluation et son suivi.
+                </Heading>
 
-                <CandidatelAdminDetails candidate={candidate} />
+                <CandidateAdminDetails candidate={candidate} />
             </div>
         </AdminLayout>
     );
 };
+
 export default Page;
