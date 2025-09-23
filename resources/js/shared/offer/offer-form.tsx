@@ -41,85 +41,73 @@ export const OfferForm: React.FC<OfferFormProps> = ({ offer }) => {
         bio: offer?.bio ?? '',
         description: offer?.description ?? '',
         image: null,
-        job_positions: offer?.job_positions.map(job => job.id) ?? [],
+        job_positions: offer?.job_positions.map((job) => job.id) ?? [],
         _method: offer ? 'PUT' : 'POST',
     });
 
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-
         const baseActionUrl = offer ? `/admin/offer/${offer.id}` : '/admin/offer';
-
-        post(baseActionUrl, {
-            forceFormData: true,
-        });
+        post(baseActionUrl, { forceFormData: true });
     };
 
     const onChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file) {
-            setData('image', file);
-        }
+        if (file) setData('image', file);
     };
 
     return (
         <form className="flex flex-col gap-6" onSubmit={onSubmit} encType="multipart/form-data" noValidate>
             <div className="grid gap-6">
+                {/* Image */}
                 <div className="grid gap-2">
                     <Label htmlFor="image">Image</Label>
-                    <Input type="file" id="image" autoFocus onChange={onChangeFile} aria-invalid={!!errors.image} required />
+                    <Input type="file" id="image" onChange={onChangeFile} aria-invalid={!!errors.image} required />
                     <InputError message={errors.image} />
                 </div>
 
+                {/* Titre */}
                 <div className="grid gap-2">
                     <Label htmlFor="name">Titre</Label>
-                    <Input
-                        id="name"
-                        autoFocus
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        aria-invalid={!!errors.name}
-                        required
-                    />
+                    <Input id="name" value={data.name} onChange={(e) => setData('name', e.target.value)} aria-invalid={!!errors.name} required />
                     <InputError message={errors.name} />
                 </div>
 
+                {/* Bio */}
                 <div className="grid gap-2">
                     <Label htmlFor="bio">Bio</Label>
                     <Textarea
                         id="bio"
-                        required
-                        tabIndex={2}
-                        autoComplete="off"
                         value={data.bio}
                         onChange={(e) => setData('bio', e.target.value)}
                         aria-invalid={!!errors.bio}
+                        required
+                        autoComplete="off"
                     />
                     <InputError message={errors.bio} />
                 </div>
 
+                {/* Postes */}
                 <div className="grid gap-2">
-                    <Label htmlFor="type">Postes</Label>
+                    <Label htmlFor="job_positions">Postes</Label>
                     <ChipsSelector
                         isPending={fetchJobPositions.isPending}
                         clearable={false}
                         items={
-                            fetchJobPositions.fetchData
-                                ? fetchJobPositions.fetchData.map((job) => {
-                                      const lenJobPositions = job.skills.length;
-                                      return {
-                                          id: job.id,
-                                          value: job.id,
-                                          label: `${job.name} ~ ${lenJobPositions} ${lenJobPositions > 0 ? 'compétences' : 'compétence'}`,
-                                          disabled: false,
-                                      };
-                                  })
-                                : []
+                            fetchJobPositions.fetchData?.map((job) => {
+                                const count = job.skills.length;
+                                return {
+                                    id: job.id,
+                                    value: job.id,
+                                    label: `${job.name} ~ ${count} ${count > 1 ? 'compétences' : 'compétence'}`,
+                                    disabled: false,
+                                };
+                            }) ?? []
                         }
                         mode="multiple"
                         selectedValues={data.job_positions}
                         onSelectionChange={(values) => setData('job_positions', values as string[])}
-                        placeholder="Selectionner les postes"
+                        placeholder="Sélectionner les postes"
                         searchable={false}
                         error={errors.job_positions || fetchJobPositions.error || undefined}
                         size="sm"
@@ -127,6 +115,7 @@ export const OfferForm: React.FC<OfferFormProps> = ({ offer }) => {
                     />
                 </div>
 
+                {/* Dates */}
                 <div className="grid gap-2">
                     <DatePicker title="Début" value={data.start_at} onChange={(d) => setData('start_at', d)} aria-invalid={!!errors.start_at} />
                     <InputError message={errors.start_at} />
@@ -134,36 +123,32 @@ export const OfferForm: React.FC<OfferFormProps> = ({ offer }) => {
 
                 <div className="grid gap-2">
                     <DatePicker
-                        disabled={processing}
                         title="Fin"
                         value={data.end_at}
                         onChange={(d) => setData('end_at', d)}
+                        disabled={processing}
                         aria-invalid={!!errors.end_at}
                     />
                     <InputError message={errors.end_at} />
                 </div>
 
+                {/* Description */}
                 <div className="grid gap-2">
                     <Label htmlFor="description">Description</Label>
                     <MarkdownTextarea
-                        className="min-h-[200px]"
                         id="description"
+                        className="min-h-[200px]"
                         defaultValue={data.description}
                         disabled={processing}
-                        onChange={(e) => setData('description', e)}
+                        onChange={(value) => setData('description', value)}
                         contentType={offer ? 'html' : 'markdown'}
                     />
                     <InputError message={errors.description} />
                 </div>
 
+                {/* Submit */}
                 <div>
-                    <Button
-                        type="submit"
-                        className="mt-4 flex items-center justify-center gap-2"
-                        tabIndex={3}
-                        disabled={processing}
-                        aria-disabled={processing}
-                    >
+                    <Button type="submit" className="mt-4 flex items-center justify-center gap-2" disabled={processing} aria-disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         {processing ? 'Enregistrement...' : 'Enregistrer'}
                     </Button>
