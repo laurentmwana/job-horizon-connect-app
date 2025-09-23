@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des candidats - Job Horizon</title>
+    <title>Liste des participants - Job Horizon</title>
     <style>
         /* Styles généraux */
         body {
@@ -57,8 +57,8 @@
             font-style: italic;
         }
         
-        /* Détails de l'offre */
-        .offer-section {
+        /* Détails de l'activité */
+        .activity-section {
             margin-bottom: 25px;
             background-color: #f8f9fa;
             padding: 15px;
@@ -66,25 +66,25 @@
             border-left: 4px solid #008235;
         }
         
-        .offer-title {
+        .activity-title {
             margin: 0 0 10px 0;
             font-size: 16px;
             color: #2c3e50;
             font-weight: bold;
         }
         
-        .offer-details {
+        .activity-details {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
         }
         
-        .offer-detail {
+        .activity-detail {
             margin: 5px 0;
         }
         
-        /* Tableau des candidats */
-        .candidates-table {
+        /* Tableau des participants */
+        .participants-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 25px;
@@ -92,7 +92,7 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
-        .candidates-table th {
+        .participants-table th {
             background-color: #008235;
             color: #fff;
             font-weight: bold;
@@ -104,17 +104,32 @@
             font-size: 10.5px;
         }
         
-        .candidates-table td {
+        .participants-table td {
             padding: 10px;
             border: 1px solid #ddd;
         }
         
-        .candidates-table tbody tr:nth-child(even) {
+        .participants-table tbody tr:nth-child(even) {
             background-color: #f9f9f9;
         }
         
-        .candidates-table tbody tr:hover {
+        .participants-table tbody tr:hover {
             background-color: #f0f7f4;
+        }
+        
+        /* Statistiques */
+        .stats-section {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f7f4;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        
+        .stats-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
         }
         
         /* Pied de page */
@@ -139,11 +154,11 @@
                 border-bottom: 2px solid #008235;
             }
             
-            .candidates-table {
+            .participants-table {
                 box-shadow: none;
             }
             
-            .candidates-table tbody tr:hover {
+            .participants-table tbody tr:hover {
                 background-color: inherit;
             }
         }
@@ -154,7 +169,7 @@
     <!-- EN-TÊTE -->
     <div class="header">
         <img src="{{ public_path('logo.svg') }}" alt="Logo Job Horizon" class="logo">
-        <h1 class="title">Liste des candidats</h1>
+        <h1 class="title">Liste des participants</h1>
         <div class="company-info">
             <span class="company-name">Entreprise Job Horizon</span><br>
             374 Colonel Mondjiba, Galerie St Pierre, Local 18<br>
@@ -167,39 +182,57 @@
         </p>
     </div>
 
-    <!-- DÉTAILS DE L'OFFRE -->
-    <div class="offer-section">
-        <h2 class="offer-title">Offre : {{ $offer->name }}</h2>
-        <div class="offer-details">
-            <p class="offer-detail"><strong>Date de début :</strong> {{ $offer->start_at }}</p>
-            <p class="offer-detail"><strong>Date de fin :</strong> {{ $offer->end_at }}</p>
-            <p class="offer-detail"><strong>Nombre de candidats :</strong> {{ count($candidates) }}</p>
+    <!-- DÉTAILS DE L'ACTIVITÉ -->
+    <div class="activity-section">
+        <h2 class="activity-title">Activité : {{ $activity->title }}</h2>
+        <div class="activity-details">
+            <p class="activity-detail"><strong>Date de début :</strong> {{ $activity->start_at->format('d/m/Y') }}</p>
+            <p class="activity-detail"><strong>Date de fin :</strong> {{ $activity->end_at->format('d/m/Y') }}</p>
+            <p class="activity-detail"><strong>Description :</strong> {{ $activity->description ?? 'Non spécifiée' }}</p>
         </div>
     </div>
 
-    <!-- TABLEAU DES CANDIDATS -->
-    <table class="candidates-table">
+    <!-- TABLEAU DES PARTICIPANTS -->
+    <table class="participants-table">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Nom complet</th>
                 <th>Email</th>
                 <th>Téléphone</th>
                 <th>Genre</th>
-                <th>Date de candidature</th>
+                <th>Date d'inscription</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($candidates as $candidate)
+            @foreach($participants as $participant)
                 <tr>
-                    <td>{{ $candidate->name }}</td>
-                    <td>{{ $candidate->user->email }}</td>
-                    <td>{{ $candidate->phone }}</td>
-                    <td>{{ $candidate->gender }}</td>
-                    <td>{{ $candidate->created_at->format('d/m/Y') }}</td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $participant->name }}</td>
+                    <td>{{ $participant->user->email }}</td>
+                    <td>{{ $participant->phone }}</td>
+                    <td>{{ $participant->gender }}</td>
+                    <td>{{ $participant->created_at->format('d/m/Y') }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+
+    <!-- STATISTIQUES -->
+    <div class="stats-section">
+        <div class="stats-title">Résumé des participants</div>
+        <p><strong>Nombre total de participants :</strong> {{ count($participants) }}</p>
+        @php
+            $maleCount = $participants->where('gender', 'Masculin')->count();
+            $femaleCount = $participants->where('gender', 'Féminin')->count();
+            $otherCount = count($participants) - $maleCount - $femaleCount;
+        @endphp
+        <p><strong>Répartition par genre :</strong> 
+            Masculin: {{ $maleCount }}, 
+            Féminin: {{ $femaleCount }}, 
+            Autre: {{ $otherCount }}
+        </p>
+    </div>
 
     <!-- PIED DE PAGE -->
     <div class="footer">
