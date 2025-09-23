@@ -9,25 +9,35 @@ import { Head, Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import React from 'react';
 
-type Props = { offers: PaginationData<Offer> };
+type Props = {
+    offers: PaginationData<Offer>;
+};
 
-const title = "Gestions d'offers";
+const title = 'Gestion des offres';
 
 const Page: React.FC<Props> = ({ offers }) => {
     return (
         <AdminLayout>
             <Head title={title} />
-            <Heading title={title}>Gérer facilement les activités publiées dans la plateforme...</Heading>
-            <div className="mb-4 flex justify-between gap-4">
-                <Button variant="outline" size="sm" asChild>
-                    <Link href="/admin/offer/create">
-                        <Plus size={15} />
-                    </Link>
-                </Button>
+            <div className="container py-12" aria-label="Section d'administration des offres">
+                <Heading title={title}>
+                    Gérez les offres publiées sur la plateforme : ajoutez, modifiez ou supprimez les opportunités proposées.
+                </Heading>
+
+                <div className="mb-4 flex justify-end">
+                    <Button variant="outline" size="sm" asChild>
+                        <Link href="/admin/offer/create">
+                            <Plus size={15} className="mr-2" />
+                            Nouvelle offre
+                        </Link>
+                    </Button>
+                </div>
+
+                <OffersTable offers={offers.data} />
+                <Pagination items={offers} />
             </div>
-            <OffersTable offers={offers.data} />
-            <Pagination items={offers} />
         </AdminLayout>
     );
 };
+
 export default Page;
