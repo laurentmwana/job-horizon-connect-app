@@ -8,16 +8,21 @@ import { PaginationData } from '@/types/paginate';
 import { Head, usePage } from '@inertiajs/react';
 import React from 'react';
 
-type Props = { offers: PaginationData<Offer> };
+type Props = {
+    offers: PaginationData<Offer>;
+};
 
 const Page: React.FC<Props> = ({ offers }) => {
     const { auth } = usePage<SharedData>().props;
+
     return (
         <BaseLayout>
             <Head title="Liste des offres" />
 
-            <div className="container py-12">
-                <Heading title="Liste des offres">Découvrez les offres disponibles et postulez en quelques clics.</Heading>
+            <div className="container py-12" aria-label="Section des offres disponibles">
+                <Heading title="Liste des offres">
+                    Parcourez les opportunités disponibles et postulez facilement pour faire avancer votre carrière.
+                </Heading>
 
                 <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {offers.data.map((offer) => (

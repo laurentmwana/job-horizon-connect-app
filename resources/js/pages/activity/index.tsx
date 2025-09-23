@@ -7,14 +7,16 @@ import { PaginationData } from '@/types/paginate';
 import { Head } from '@inertiajs/react';
 import React from 'react';
 
-type Props = { activities: PaginationData<Activity> };
+type Props = {
+    activities: PaginationData<Activity>;
+};
 
 const Page: React.FC<Props> = ({ activities }) => {
     return (
         <BaseLayout>
             <Head title="Liste des activités" />
 
-            <div className="container py-12">
+            <div className="container py-12" aria-label="Section des activités disponibles">
                 <Heading title="Liste des activités">
                     Explorez les activités disponibles et participez facilement pour enrichir votre expérience.
                 </Heading>

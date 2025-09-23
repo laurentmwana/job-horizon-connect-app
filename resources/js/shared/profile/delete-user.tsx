@@ -1,14 +1,14 @@
+'use client';
+
 import { ConfirmationPasswordDialog } from '@/components/dialog-confirmation';
 import { Button } from '@/components/ui/button';
-import { User } from '@/types';
 import React, { useState } from 'react';
 
-type Props = { user: User };
+export const ProfileUserDeleteAccountForm: React.FC = () => {
+    const [open, setOpen] = useState(false);
 
-export const ProfileUserDeleteAccountForm: React.FC<Props> = ({ user }) => {
-    const [open, setOpen] = useState<boolean>(false);
     return (
-        <div className="rounded-xl border px-4 py-6">
+        <div className="rounded-xl border px-4 py-6" aria-label="Formulaire de suppression de compte">
             <div className="max-w-4xl space-y-6">
                 <div className="grid gap-3">
                     <h2 className="text-base font-medium">Suppression de compte</h2>
@@ -22,7 +22,7 @@ export const ProfileUserDeleteAccountForm: React.FC<Props> = ({ user }) => {
                     Supprimer mon compte
                 </Button>
 
-                <ConfirmationPasswordDialog open={open} setOpen={setOpen} url={'/profile/destroy'} />
+                <ConfirmationPasswordDialog open={open} setOpen={setOpen} url="/profile/destroy" />
             </div>
         </div>
     );

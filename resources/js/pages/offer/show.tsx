@@ -6,18 +6,22 @@ import { Offer } from '@/types/model';
 import { Head, usePage } from '@inertiajs/react';
 import React from 'react';
 
-type Props = { offer: Offer };
+type Props = {
+    offer: Offer;
+};
 
 const Page: React.FC<Props> = ({ offer }) => {
-    console.log(offer);
     const { auth } = usePage<SharedData>().props;
 
     return (
         <BaseLayout>
-            <Head title="En savoir plus sur une offre" />
+            <Head title="Détails de l'offre" />
 
-            <div className="container py-12">
-                <Heading title="En savoir plus sur une offre">Découvrez les offres disponibles et postulez en quelques clics.</Heading>
+            <div className="container py-12" aria-label="Détails de l'offre sélectionnée">
+                <Heading title="Détails de l'offre">
+                    Consultez toutes les informations relatives à cette opportunité et postulez si elle correspond à votre profil.
+                </Heading>
+
                 <OfferDetails candidate={auth.user.candidate} offer={offer} />
             </div>
         </BaseLayout>
