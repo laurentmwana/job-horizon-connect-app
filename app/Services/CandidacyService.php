@@ -50,6 +50,8 @@ class CandidacyService
             ->findById($id, $withRelation);
     }
 
+
+
     /**
      * @param \App\Models\Candidate $candidate
      * @param string $year

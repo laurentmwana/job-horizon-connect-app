@@ -31,6 +31,20 @@ class CandidateRepository
     }
 
     /**
+     * @param string $offerId
+     * @return \Illuminate\Database\Eloquent\Collection<int, Candidate>
+     */
+    public function findByOffer(string $offerId)
+    {
+        return Candidate::query()->with(['user'])
+            ->whereHas('candidacies', function ($query)  use($offerId) {
+                $query->where('offer_id', $offerId);
+            })
+            ->orderByDesc('updated_at')
+            ->get();
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Builder<Candidate>
      */
     private function getBaseQuery()

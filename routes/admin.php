@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Candidacy\AdminGenerateCandidateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Offer\AdminOfferController;
@@ -43,4 +44,11 @@ Route::middleware($MIDDLEWARE_ARRAY)
         Route::get('/participant/{id}', [AdminParticipantController::class, 'show'])->name('participant.show');
         Route::post('/participant/{id}/status', [AdminParticipantController::class, 'changeStatus'])->name('participant.status');
         Route::delete('/participant/{id}', [AdminParticipantController::class, 'destroy'])->name('participant.destroy');
+
+    Route::get('/generate/candidacies', [AdminGenerateCandidateController::class, 'index'])
+        ->name('generate.candidacy.index');
+        
+    Route::get('/generate/candidacies/offer/{id}', [AdminGenerateCandidateController::class, 'download'])
+        ->name('generate.candidacy.download');
+
 });
