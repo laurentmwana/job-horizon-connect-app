@@ -31,9 +31,7 @@ export const CandidacyForm: React.FC<CandidacyFormProps> = ({ candidacy, open, s
         e.preventDefault();
 
         post(`/admin/candidacy/${candidacy.id}/status`, {
-            onSuccess: () => {
-                closeModal();
-            },
+            onSuccess: closeModal,
         });
     };
 
@@ -46,32 +44,28 @@ export const CandidacyForm: React.FC<CandidacyFormProps> = ({ candidacy, open, s
     return (
         <Dialog open={open} onOpenChange={closeModal}>
             <DialogContent>
-                <DialogTitle>Êtes-vous sûr de vouloir continuer ?</DialogTitle>
-                <DialogDescription>Cette action est irréversible. Veuillez entrer votre mot de passe pour confirmer.</DialogDescription>
+                <DialogTitle>Modifier le statut de la candidature</DialogTitle>
+                <DialogDescription>Veuillez sélectionner un nouveau statut. Cette action est irréversible.</DialogDescription>
 
                 <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
                     <div className="grid gap-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="status">Status</Label>
+                            <Label htmlFor="status">Statut</Label>
                             <ChipsSelector
                                 isPending={fetchCandidaciesStatus.isPending}
                                 clearable={false}
                                 items={
-                                    fetchCandidaciesStatus.fetchData
-                                        ? fetchCandidaciesStatus.fetchData.map((status) => {
-                                              return {
-                                                  id: status,
-                                                  value: status,
-                                                  label: status,
-                                                  disabled: status == 'pending' || candidacy.candidacy_at !== null,
-                                              };
-                                          })
-                                        : []
+                                    fetchCandidaciesStatus.fetchData?.map((status) => ({
+                                        id: status,
+                                        value: status,
+                                        label: status,
+                                        disabled: status === 'pending' || candidacy.candidacy_at !== null,
+                                    })) ?? []
                                 }
                                 mode="single"
                                 selectedValues={data.status}
-                                onSelectionChange={(values) => setData('status', values as string)}
-                                placeholder="Selectionner une valeur"
+                                onSelectionChange={(value) => setData('status', value as string)}
+                                placeholder="Sélectionner un statut"
                                 searchable={false}
                                 error={errors.status || fetchCandidaciesStatus.error || undefined}
                                 size="sm"
@@ -85,7 +79,11 @@ export const CandidacyForm: React.FC<CandidacyFormProps> = ({ candidacy, open, s
                                 </Button>
                             </DialogClose>
 
-                            <Button disabled={processing || data.status === 'pending' || candidacy.candidacy_at !== null} type="submit">
+                            <Button
+                                type="submit"
+                                disabled={processing || data.status === 'pending' || candidacy.candidacy_at !== null}
+                                aria-disabled={processing || data.status === 'pending' || candidacy.candidacy_at !== null}
+                            >
                                 {processing ? 'Mise à jour...' : 'Effectuer'}
                             </Button>
                         </DialogFooter>
