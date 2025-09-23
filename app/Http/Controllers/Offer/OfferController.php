@@ -12,12 +12,12 @@ use App\Http\Requests\CandidacyAppliedRequest;
 
 class OfferController extends Controller
 {
-    /**
-     * @return \Inertia\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $offers = app(OfferService::class)->findPaginatedAndFiltered();
+        $user = $request->user();
+
+        $offers = app(OfferService::class)
+            ->findPaginatedAndFiltered(candidate: $user->candidate);
 
         return Inertia::render('offer/index', [
             'offers' => $offers,

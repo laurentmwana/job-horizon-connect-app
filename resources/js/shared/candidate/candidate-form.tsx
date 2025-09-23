@@ -38,7 +38,6 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({ candidate }) => {
 
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-
         candidate ? put(`/admin/candidate/${candidate.id}`) : post('/admin/candidate');
     };
 
@@ -49,11 +48,11 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({ candidate }) => {
                     <Label htmlFor="name">Nom</Label>
                     <Input
                         id="name"
-                        autoFocus
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
                         aria-invalid={!!errors.name}
                         required
+                        autoFocus
                     />
                     <InputError message={errors.name} />
                 </div>
@@ -62,7 +61,6 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({ candidate }) => {
                     <Label htmlFor="firstname">Postnom</Label>
                     <Input
                         id="firstname"
-                        autoFocus
                         value={data.firstname}
                         onChange={(e) => setData('firstname', e.target.value)}
                         aria-invalid={!!errors.firstname}
@@ -73,23 +71,15 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({ candidate }) => {
 
                 <div className="grid gap-2">
                     <Label htmlFor="phone">Téléphone</Label>
-                    <Input
-                        id="phone"
-                        autoFocus
-                        value={data.phone}
-                        onChange={(e) => setData('phone', e.target.value)}
-                        aria-invalid={!!errors.phone}
-                        required
-                    />
+                    <Input id="phone" value={data.phone} onChange={(e) => setData('phone', e.target.value)} aria-invalid={!!errors.phone} required />
                     <InputError message={errors.phone} />
                 </div>
 
-                {candidate ? null : (
+                {!candidate && (
                     <div className="grid gap-2">
                         <Label htmlFor="email">Adresse e-mail</Label>
                         <Input
                             id="email"
-                            autoFocus
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
                             aria-invalid={!!errors.email}
@@ -105,21 +95,17 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({ candidate }) => {
                         isPending={fetchGenders.isPending}
                         clearable={false}
                         items={
-                            fetchGenders.fetchData
-                                ? fetchGenders.fetchData.map((gender) => {
-                                      return {
-                                          id: gender,
-                                          value: gender,
-                                          label: gender,
-                                          disabled: false,
-                                      };
-                                  })
-                                : []
+                            fetchGenders.fetchData?.map((gender) => ({
+                                id: gender,
+                                value: gender,
+                                label: gender,
+                                disabled: false,
+                            })) ?? []
                         }
                         mode="single"
                         selectedValues={data.gender}
-                        onSelectionChange={(values) => setData('gender', values as string)}
-                        placeholder="Selectionner les postes"
+                        onSelectionChange={(value) => setData('gender', value as string)}
+                        placeholder="Sélectionner un genre"
                         searchable={false}
                         error={errors.gender || fetchGenders.error || undefined}
                         size="sm"
@@ -127,13 +113,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({ candidate }) => {
                 </div>
 
                 <div>
-                    <Button
-                        type="submit"
-                        className="mt-4 flex items-center justify-center gap-2"
-                        tabIndex={3}
-                        disabled={processing}
-                        aria-disabled={processing}
-                    >
+                    <Button type="submit" className="mt-4 flex items-center justify-center gap-2" disabled={processing} aria-disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         {processing ? 'Enregistrement...' : 'Enregistrer'}
                     </Button>
@@ -143,10 +123,18 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({ candidate }) => {
     );
 };
 
+type CandidateCompletedFormData = {
+    id: string;
+    name: string;
+    firstname: string;
+    phone: string;
+    gender: string;
+};
+
 export const CandidateCompletedForm: React.FC = () => {
     const fetchGenders = useFetch<string[]>('/api/enum/genders');
 
-    const { processing, setData, data, errors, post, put } = useForm({
+    const { processing, setData, data, errors, post } = useForm<CandidateCompletedFormData>({
         id: '',
         name: '',
         firstname: '',
@@ -156,7 +144,6 @@ export const CandidateCompletedForm: React.FC = () => {
 
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-
         post('/candidate');
     };
 
@@ -167,11 +154,11 @@ export const CandidateCompletedForm: React.FC = () => {
                     <Label htmlFor="name">Nom</Label>
                     <Input
                         id="name"
-                        autoFocus
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
                         aria-invalid={!!errors.name}
                         required
+                        autoFocus
                     />
                     <InputError message={errors.name} />
                 </div>
@@ -180,7 +167,6 @@ export const CandidateCompletedForm: React.FC = () => {
                     <Label htmlFor="firstname">Postnom</Label>
                     <Input
                         id="firstname"
-                        autoFocus
                         value={data.firstname}
                         onChange={(e) => setData('firstname', e.target.value)}
                         aria-invalid={!!errors.firstname}
@@ -191,14 +177,7 @@ export const CandidateCompletedForm: React.FC = () => {
 
                 <div className="grid gap-2">
                     <Label htmlFor="phone">Téléphone</Label>
-                    <Input
-                        id="phone"
-                        autoFocus
-                        value={data.phone}
-                        onChange={(e) => setData('phone', e.target.value)}
-                        aria-invalid={!!errors.phone}
-                        required
-                    />
+                    <Input id="phone" value={data.phone} onChange={(e) => setData('phone', e.target.value)} aria-invalid={!!errors.phone} required />
                     <InputError message={errors.phone} />
                 </div>
 
@@ -208,21 +187,17 @@ export const CandidateCompletedForm: React.FC = () => {
                         isPending={fetchGenders.isPending}
                         clearable={false}
                         items={
-                            fetchGenders.fetchData
-                                ? fetchGenders.fetchData.map((gender) => {
-                                      return {
-                                          id: gender,
-                                          value: gender,
-                                          label: gender,
-                                          disabled: false,
-                                      };
-                                  })
-                                : []
+                            fetchGenders.fetchData?.map((gender) => ({
+                                id: gender,
+                                value: gender,
+                                label: gender,
+                                disabled: false,
+                            })) ?? []
                         }
                         mode="single"
                         selectedValues={data.gender}
-                        onSelectionChange={(values) => setData('gender', values as string)}
-                        placeholder="Selectionner les postes"
+                        onSelectionChange={(value) => setData('gender', value as string)}
+                        placeholder="Sélectionner un genre"
                         searchable={false}
                         error={errors.gender || fetchGenders.error || undefined}
                         size="sm"
@@ -230,13 +205,7 @@ export const CandidateCompletedForm: React.FC = () => {
                 </div>
 
                 <div>
-                    <Button
-                        type="submit"
-                        className="mt-4 flex items-center justify-center gap-2"
-                        tabIndex={3}
-                        disabled={processing}
-                        aria-disabled={processing}
-                    >
+                    <Button type="submit" className="mt-4 flex items-center justify-center gap-2" disabled={processing} aria-disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         {processing ? 'Enregistrement...' : 'Enregistrer'}
                     </Button>

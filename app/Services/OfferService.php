@@ -18,13 +18,16 @@ class OfferService
      */
     public function __construct(private FileUploadService $uploader) {}
 
+ 
     /**
      * @param int $perPage
+     * @param mixed $candidate
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function findPaginatedAndFiltered(int $perPage = 15)
+    public function findPaginatedAndFiltered(int $perPage = 15, ?Candidate $candidate = null)
     {
-        return app(OfferRepository::class)->findPaginatedAndFiltered($perPage);
+        return app(OfferRepository::class)
+            ->findPaginatedAndFiltered($perPage, $candidate);
     }
 
     /**

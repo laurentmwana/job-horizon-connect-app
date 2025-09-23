@@ -5,21 +5,21 @@ export const ContactInfo = () => {
         {
             icon: Mail,
             label: 'Adresse e-mail',
-            value: 'contact@partagetonconseil.com',
-            href: 'mailto:contact@partagetonconseil.com',
+            value: 'contact@job-horizon.com',
+            href: 'mailto:contact@job-horizon.com',
             type: 'link' as const,
         },
         {
             icon: Phone,
             label: 'Téléphone',
-            value: '+243 812 345 678',
-            href: 'tel:+243812345678',
+            value: '+243 818 043 802',
+            href: 'tel:+243818043802',
             type: 'link' as const,
         },
         {
             icon: Home,
             label: 'Adresse',
-            value: "Université de Kinshasa, Av. de l'Université, Kinshasa, RDC",
+            value: '374 Colonel mondjiba, galerie st Pierre, local 18. Référence : alimentation S & K, Kinshasa, RDC',
             type: 'text' as const,
         },
         {

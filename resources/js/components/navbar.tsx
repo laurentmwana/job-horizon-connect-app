@@ -28,7 +28,7 @@ export const Navbar = () => {
                 {/* Logo */}
                 <div className="mr-4 hidden md:flex">
                     <Link href="/" className="mr-6 flex items-center space-x-2">
-                        <AppLogo width={100} height={100} />
+                        <AppLogo size="sm" />
                     </Link>
                     <nav className="flex items-center gap-4 text-sm lg:gap-6">
                         {navItems.map((item) => (
@@ -47,7 +47,7 @@ export const Navbar = () => {
 
                 {/* Mobile Logo */}
                 <Link href="/" className="mr-6 flex items-center space-x-2 md:hidden">
-                    <AppLogo width={100} height={100} />
+                    <AppLogo size="sm" />
                 </Link>
 
                 {/* Right side */}
@@ -125,9 +125,8 @@ export const Navbar = () => {
                             <SheetContent side="left" className="pr-0">
                                 <SheetHeader>
                                     <SheetTitle className="text-left">
-                                        <Link href="/" className="flex items-center">
-                                            <AppLogo width={24} height={24} className="mr-2" />
-                                            <span className="font-bold">Navigation</span>
+                                        <Link href="/" className="flex items-center gap-4">
+                                            <AppLogo size="sm" className="mr-2" />
                                         </Link>
                                     </SheetTitle>
                                 </SheetHeader>
