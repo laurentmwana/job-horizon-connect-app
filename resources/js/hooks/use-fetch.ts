@@ -1,51 +1,37 @@
+// hooks/useFetch.ts
+import { fetchData } from '@/lib/fetch';
 import { FetchResponse } from '@/types';
 import { useEffect, useState } from 'react';
 
 export const useFetch = <T>(path: string): FetchResponse<T> => {
-    const [isPending, setIsPending] = useState<boolean>(true);
-    const [fetchData, setFetchData] = useState<T | null>(null);
+    const [isPending, setIsPending] = useState(true);
+    const [fetchDataState, setFetchDataState] = useState<T | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!path) return;
 
-        const fetchDataAsync = async () => {
-            if (!isPending) {
-                setIsPending(true);
-            }
+        const fetchAsync = async () => {
+            setIsPending(true);
             setError(null);
 
             try {
-                const response = await fetch(path, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Erreur HTTP: ${response.status}`);
-                }
-                const data: T = await response.json();
-                setFetchData(data);
+                const data = await fetchData<T>(path);
+                setFetchDataState(data);
             } catch (err) {
-                if (err instanceof Error) {
-                    setError(err.message);
-                } else {
-                    setError('Une erreur inconnue est survenue');
-                }
-                setFetchData(null);
+                if (err instanceof Error) setError(err.message);
+                else setError('Une erreur inconnue est survenue');
+                setFetchDataState(null);
             } finally {
                 setIsPending(false);
             }
         };
 
-        fetchDataAsync();
+        fetchAsync();
     }, [path]);
 
     return {
-        fetchData,
+        fetchData: fetchDataState,
         isPending,
         error,
     };
