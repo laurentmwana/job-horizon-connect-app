@@ -31,9 +31,7 @@ export const ParticipantForm: React.FC<ParticipantFormProps> = ({ participant, o
         e.preventDefault();
 
         post(`/admin/participant/${participant.id}/status`, {
-            onSuccess: () => {
-                closeModal();
-            },
+            onSuccess: closeModal,
         });
     };
 
@@ -46,32 +44,28 @@ export const ParticipantForm: React.FC<ParticipantFormProps> = ({ participant, o
     return (
         <Dialog open={open} onOpenChange={closeModal}>
             <DialogContent>
-                <DialogTitle>Êtes-vous sûr de vouloir continuer ?</DialogTitle>
-                <DialogDescription>Cette action est irréversible. Veuillez entrer votre mot de passe pour confirmer.</DialogDescription>
+                <DialogTitle>Modifier le statut du participant</DialogTitle>
+                <DialogDescription>Veuillez sélectionner un nouveau statut pour ce participant. Cette action est irréversible.</DialogDescription>
 
                 <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
                     <div className="grid gap-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="status">Status</Label>
+                            <Label htmlFor="status">Statut</Label>
                             <ChipsSelector
                                 isPending={fetchParticipatedStatus.isPending}
                                 clearable={false}
                                 items={
-                                    fetchParticipatedStatus.fetchData
-                                        ? fetchParticipatedStatus.fetchData.map((status) => {
-                                              return {
-                                                  id: status,
-                                                  value: status,
-                                                  label: status,
-                                                  disabled: status == 'pending' || participant.participant_at !== null,
-                                              };
-                                          })
-                                        : []
+                                    fetchParticipatedStatus.fetchData?.map((status) => ({
+                                        id: status,
+                                        value: status,
+                                        label: status,
+                                        disabled: status === 'pending' || participant.participant_at !== null,
+                                    })) ?? []
                                 }
                                 mode="single"
                                 selectedValues={data.status}
-                                onSelectionChange={(values) => setData('status', values as string)}
-                                placeholder="Selectionner une valeur"
+                                onSelectionChange={(value) => setData('status', value as string)}
+                                placeholder="Sélectionner une valeur"
                                 searchable={false}
                                 error={errors.status || fetchParticipatedStatus.error || undefined}
                                 size="sm"
@@ -85,7 +79,11 @@ export const ParticipantForm: React.FC<ParticipantFormProps> = ({ participant, o
                                 </Button>
                             </DialogClose>
 
-                            <Button disabled={processing || data.status === 'pending' || participant.participant_at !== null} type="submit">
+                            <Button
+                                type="submit"
+                                disabled={processing || data.status === 'pending' || participant.participant_at !== null}
+                                aria-disabled={processing || data.status === 'pending' || participant.participant_at !== null}
+                            >
                                 {processing ? 'Mise à jour...' : 'Effectuer'}
                             </Button>
                         </DialogFooter>
