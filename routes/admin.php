@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Candidacy\AdminGenerateCandidateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Offer\AdminOfferController;
@@ -10,6 +9,8 @@ use App\Http\Controllers\Candidacy\AdminCandidacyController;
 use App\Http\Controllers\Candidate\AdminCandidateController;
 use App\Http\Controllers\JobPosition\AdminJobPositionController;
 use App\Http\Controllers\Participant\AdminParticipantController;
+use App\Http\Controllers\Candidacy\AdminGenerateCandidateController;
+use App\Http\Controllers\Participant\AdminGenerateParticipantController;
 
 $MIDDLEWARE_ARRAY = ['auth', 'verified', 'admin'];
 
@@ -47,8 +48,12 @@ Route::middleware($MIDDLEWARE_ARRAY)
 
     Route::get('/generate/candidacies', [AdminGenerateCandidateController::class, 'index'])
         ->name('generate.candidacy.index');
-        
     Route::get('/generate/candidacies/offer/{id}', [AdminGenerateCandidateController::class, 'download'])
         ->name('generate.candidacy.download');
+
+    Route::get('/generate/participants', [AdminGenerateParticipantController::class, 'index'])
+        ->name('generate.participant.index');
+    Route::get('/generate/participants/activity/{id}', [AdminGenerateParticipantController::class, 'download'])
+        ->name('generate.participant.download');
 
 });

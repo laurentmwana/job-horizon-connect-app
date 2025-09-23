@@ -14,6 +14,7 @@ Route::prefix('enum')->group(function () {
 Route::prefix('data')->group(function () {
     Route::get('job-positions', [ApiDataController::class, 'jobPositions']);
     Route::get('offers', [ApiDataController::class, 'offers']);
+    Route::get('activities', [ApiDataController::class, 'activities']);
     Route::get('candidates', [ApiDataController::class, 'candidates']);
 });
 

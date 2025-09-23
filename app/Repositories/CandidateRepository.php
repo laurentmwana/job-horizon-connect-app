@@ -45,6 +45,20 @@ class CandidateRepository
     }
 
     /**
+     * @param string $activityId
+     * @return \Illuminate\Database\Eloquent\Collection<int, Candidate>
+     */
+    public function findByActivity(string $activityId)
+    {
+        return Candidate::query()->with(['user'])
+            ->whereHas('participants', function ($query)  use($activityId) {
+                $query->where('activity_id', $activityId);
+            })
+            ->orderByDesc('updated_at')
+            ->get();
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Builder<Candidate>
      */
     private function getBaseQuery()

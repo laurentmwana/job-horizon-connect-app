@@ -45,6 +45,15 @@ class CandidateService
     }
 
     /**
+     * @param string $activityId
+     * @return \Illuminate\Database\Eloquent\Collection<int, Candidate>
+     */
+    public function findByActivity(string $activityId)
+    {
+        return app(CandidateRepository::class)->findByActivity($activityId);
+    }
+
+    /**
      * @param \App\Dto\CandidateDto $dto
      * @return \App\Models\JobPosition
      */
