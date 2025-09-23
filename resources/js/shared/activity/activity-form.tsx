@@ -47,78 +47,64 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ activity }) => {
 
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-
         const baseActionUrl = activity ? `/admin/activity/${activity.id}` : '/admin/activity';
-
-        post(baseActionUrl, {
-            forceFormData: true,
-        });
-
-        console.log(errors);
+        post(baseActionUrl, { forceFormData: true });
     };
 
     const onChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file) {
-            setData('image', file);
-        }
+        if (file) setData('image', file);
     };
 
     return (
         <form className="flex flex-col gap-6" onSubmit={onSubmit} encType="multipart/form-data" noValidate>
             <div className="grid gap-6">
+                {/* Image */}
                 <div className="grid gap-2">
                     <Label htmlFor="image">Image</Label>
-                    <Input type="file" id="image" autoFocus onChange={onChangeFile} aria-invalid={!!errors.image} required />
+                    <Input type="file" id="image" onChange={onChangeFile} aria-invalid={!!errors.image} required />
                     <InputError message={errors.image} />
                 </div>
 
+                {/* Title */}
                 <div className="grid gap-2">
                     <Label htmlFor="title">Titre</Label>
-                    <Input
-                        id="title"
-                        autoFocus
-                        value={data.title}
-                        onChange={(e) => setData('title', e.target.value)}
-                        aria-invalid={!!errors.title}
-                        required
-                    />
+                    <Input id="title" value={data.title} onChange={(e) => setData('title', e.target.value)} aria-invalid={!!errors.title} required />
                     <InputError message={errors.title} />
                 </div>
 
+                {/* Description */}
                 <div className="grid gap-2">
                     <Label htmlFor="description">Description</Label>
                     <Textarea
                         id="description"
-                        required
-                        tabIndex={2}
-                        autoComplete="off"
                         value={data.description}
                         onChange={(e) => setData('description', e.target.value)}
                         aria-invalid={!!errors.description}
+                        required
+                        autoComplete="off"
                     />
                     <InputError message={errors.description} />
                 </div>
 
+                {/* Type */}
                 <div className="grid gap-2">
                     <Label htmlFor="type">Type</Label>
                     <ChipsSelector
                         isPending={fetchTypes.isPending}
                         clearable={false}
                         items={
-                            fetchTypes.fetchData
-                                ? fetchTypes.fetchData.map((c) => ({
-                                      id: c,
-                                      value: c,
-                                      label: c,
-                                      disabled: false,
-                                  }))
-                                : []
+                            fetchTypes.fetchData?.map((c) => ({
+                                id: c,
+                                value: c,
+                                label: c,
+                                disabled: false,
+                            })) ?? []
                         }
                         mode="single"
                         selectedValues={data.type}
-                        onSelectionChange={(values) => setData('type', values as string)}
-                        placeholder="Selectionner un type"
+                        onSelectionChange={(value) => setData('type', value as string)}
+                        placeholder="Sélectionner un type"
                         searchable={false}
                         error={errors.type || fetchTypes.error || undefined}
                         size="sm"
@@ -126,43 +112,41 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ activity }) => {
                     />
                 </div>
 
+                {/* Start Date */}
                 <div className="grid gap-2">
                     <DatePicker title="Début" value={data.start_at} onChange={(d) => setData('start_at', d)} aria-invalid={!!errors.start_at} />
                     <InputError message={errors.start_at} />
                 </div>
 
+                {/* End Date */}
                 <div className="grid gap-2">
                     <DatePicker
-                        disabled={processing}
                         title="Fin"
                         value={data.end_at}
                         onChange={(d) => setData('end_at', d)}
+                        disabled={processing}
                         aria-invalid={!!errors.end_at}
                     />
                     <InputError message={errors.end_at} />
                 </div>
 
+                {/* Content */}
                 <div className="grid gap-2">
                     <Label htmlFor="content">Contenu</Label>
                     <MarkdownTextarea
-                        className="min-h-[200px]"
                         id="content"
+                        className="min-h-[200px]"
                         defaultValue={data.content}
                         disabled={processing}
-                        onChange={(e) => setData('content', e)}
+                        onChange={(value) => setData('content', value)}
                         contentType={activity ? 'html' : 'markdown'}
                     />
                     <InputError message={errors.content} />
                 </div>
 
+                {/* Submit */}
                 <div>
-                    <Button
-                        type="submit"
-                        className="mt-4 flex items-center justify-center gap-2"
-                        tabIndex={3}
-                        disabled={processing}
-                        aria-disabled={processing}
-                    >
+                    <Button type="submit" className="mt-4 flex items-center justify-center gap-2" disabled={processing} aria-disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         {processing ? 'Enregistrement...' : 'Enregistrer'}
                     </Button>
