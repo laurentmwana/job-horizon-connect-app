@@ -30,10 +30,9 @@ const Page: React.FC<Props> = ({ filters, stats, candidacies, participants }) =>
         <BaseLayout>
             <Head title={title} />
 
-            <div className="container flex flex-col py-12">
+            <div className="container flex flex-col py-12" aria-label="Vue personnelle de l'utilisateur">
                 <Heading title={title}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis ex cumque temporibus blanditiis eaque, enim laudantium iure dolorem
-                    hic culpa adipisci eligendi dolorum molestias? Assumenda suscipit dicta quibusdam ratione temporibus!
+                    Consultez vos statistiques de participation et de candidature, filtrez par période et suivez l’évolution de votre engagement.
                 </Heading>
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -65,4 +64,5 @@ const Page: React.FC<Props> = ({ filters, stats, candidacies, participants }) =>
         </BaseLayout>
     );
 };
+
 export default Page;
