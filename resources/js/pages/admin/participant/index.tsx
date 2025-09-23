@@ -7,18 +7,26 @@ import { PaginationData } from '@/types/paginate';
 import { Head } from '@inertiajs/react';
 import React from 'react';
 
-type Props = { participants: PaginationData<Participant> };
+type Props = {
+    participants: PaginationData<Participant>;
+};
 
-const title = 'Gestions des participants';
+const title = 'Gestion des participants';
 
 const Page: React.FC<Props> = ({ participants }) => {
     return (
         <AdminLayout>
             <Head title={title} />
-            <Heading title={title}>Gérer facilement les activités publiées dans la plateforme...</Heading>
-            <ParticipantTable participants={participants.data} />
-            <Pagination items={participants} />
+            <div className="container py-12" aria-label="Section d'administration des participants">
+                <Heading title={title}>
+                    Gérez les profils des participants inscrits sur la plateforme : consultez leurs informations et suivez leur activité.
+                </Heading>
+
+                <ParticipantTable participants={participants.data} />
+                <Pagination items={participants} />
+            </div>
         </AdminLayout>
     );
 };
+
 export default Page;
