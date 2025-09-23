@@ -6,17 +6,20 @@ import React from 'react';
 
 const title = "Création d'une compétence";
 
-type Props = {};
-
-const Page: React.FC<Props> = () => {
+const Page: React.FC = () => {
     return (
         <AdminLayout>
             <Head title={title} />
-            <Heading title={title}>Ajouter une activité pour facilement les activités publiées dans la plateforme...</Heading>
-            <div className="max-w-5xl">
-                <SkillForm />
+            <div className="container py-12" aria-label="Formulaire de création de compétence">
+                <Heading title={title}>
+                    Ajoutez une nouvelle compétence pour enrichir les profils et améliorer la précision des évaluations sur la plateforme.
+                </Heading>
+                <div className="max-w-5xl">
+                    <SkillForm />
+                </div>
             </div>
         </AdminLayout>
     );
 };
+
 export default Page;

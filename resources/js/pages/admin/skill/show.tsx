@@ -15,13 +15,15 @@ const Page: React.FC<Props> = ({ skill }) => {
     return (
         <AdminLayout>
             <Head title={title} />
-
-            <div className="container py-12">
-                <Heading title={title}>Découvrez tous les détails et participez en quelques clics.</Heading>
+            <div className="container py-12" aria-label="Détails administratifs de la compétence">
+                <Heading title={title}>
+                    Consultez toutes les informations liées à cette compétence pour faciliter sa gestion et son intégration dans les profils.
+                </Heading>
 
                 <SkillAdminDetails skill={skill} />
             </div>
         </AdminLayout>
     );
 };
+
 export default Page;

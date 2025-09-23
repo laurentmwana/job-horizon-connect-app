@@ -5,6 +5,8 @@ import { Offer } from '@/types/model';
 import { Head } from '@inertiajs/react';
 import React from 'react';
 
+const title = 'En savoir plus sur une offre';
+
 type Props = {
     offer: Offer;
 };
@@ -12,14 +14,16 @@ type Props = {
 const Page: React.FC<Props> = ({ offer }) => {
     return (
         <AdminLayout>
-            <Head title="En savoir plus sur une offre" />
+            <Head title={title} />
+            <div className="container py-12" aria-label="Détails administratifs de l'offre">
+                <Heading title={title}>
+                    Consultez toutes les informations relatives à cette offre pour faciliter sa gestion et son suivi sur la plateforme.
+                </Heading>
 
-            <div className="container py-12">
-                <Heading title="En savoir plus sur une offre">Découvrez tous les détails et participez en quelques clics.</Heading>
-
-                <OfferAdminDetails offer={offer} />
+                <OfferAdminDetails candidate={null} offer={offer} />
             </div>
         </AdminLayout>
     );
 };
+
 export default Page;

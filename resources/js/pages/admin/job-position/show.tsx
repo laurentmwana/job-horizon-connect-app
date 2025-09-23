@@ -15,13 +15,15 @@ const Page: React.FC<Props> = ({ jobPosition }) => {
     return (
         <AdminLayout>
             <Head title={title} />
-
-            <div className="container py-12">
-                <Heading title={title}>Découvrez tous les détails et participez en quelques clics.</Heading>
+            <div className="container py-12" aria-label="Détails administratifs du poste">
+                <Heading title={title}>
+                    Consultez toutes les informations liées à ce poste pour faciliter sa gestion et son intégration dans les offres disponibles.
+                </Heading>
 
                 <JobPositionAdminDetails jobPosition={jobPosition} />
             </div>
         </AdminLayout>
     );
 };
+
 export default Page;

@@ -6,17 +6,20 @@ import React from 'react';
 
 const title = "Création d'une activité";
 
-type Props = {};
-
-const Page: React.FC<Props> = () => {
+const Page: React.FC = () => {
     return (
         <AdminLayout>
             <Head title={title} />
-            <Heading title={title}>Ajouter une activité pour facilement les activités publiées dans la plateforme...</Heading>
-            <div className="max-w-5xl">
-                <ActivityForm />
+            <div className="container py-12" aria-label="Formulaire de création d'activité">
+                <Heading title={title}>
+                    Ajoutez une nouvelle activité pour enrichir les opportunités proposées sur la plateforme et faciliter leur publication.
+                </Heading>
+                <div className="max-w-5xl">
+                    <ActivityForm />
+                </div>
             </div>
         </AdminLayout>
     );
 };
+
 export default Page;
