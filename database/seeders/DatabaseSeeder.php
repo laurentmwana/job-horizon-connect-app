@@ -3,13 +3,13 @@
 namespace Database\Seeders;
 
 use App\Enums\UserRoleEnum;
+use App\Models\Faq;
 use App\Models\User;
 use App\Models\Offer;
 use App\Models\Skill;
 use App\Models\Activity;
 use App\Models\Candidacy;
 use App\Models\Candidate;
-use App\Models\Recruiter;
 use App\Models\JobPosition;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Participant;
@@ -85,6 +85,9 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-
+        // Faq is_star = true
+        Faq::factory(5)->create(['is_star' => true]);
+        // Faq is_star = false
+        Faq::factory(10)->create(['is_star' => false]);
     }
 }
