@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Faq\AdminFaqController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Offer\AdminOfferController;
@@ -56,4 +57,6 @@ Route::middleware($MIDDLEWARE_ARRAY)
     Route::get('/generate/participants/activity/{id}', [AdminGenerateParticipantController::class, 'download'])
         ->name('generate.participant.download');
 
+    Route::resource('faq', AdminFaqController::class)
+            ->parameter('faq', 'id');
 });
