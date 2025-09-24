@@ -76,3 +76,10 @@ export interface Participant extends DateTimeInterfaceModel {
     status: 'refused' | 'pending' | 'canceled';
     participant_at: string | null;
 }
+
+export interface Faq extends DateTimeInterfaceModel {
+    id: string;
+    question: string;
+    answer: string;
+    is_star: boolean;
+}
