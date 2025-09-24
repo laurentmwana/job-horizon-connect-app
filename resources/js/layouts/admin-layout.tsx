@@ -21,7 +21,7 @@ import {
 import { excerpt, getInitials, isMenuActive } from '@/lib/utils';
 import { SharedData } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import { Award, Briefcase, Calendar, FileText, User, Users } from 'lucide-react';
+import { Award, Briefcase, Calendar, FileQuestion, FileText, User, Users } from 'lucide-react';
 
 import { PropsWithChildren } from 'react';
 
@@ -85,6 +85,12 @@ const items = [
                 url: '/admin/participant',
                 icon: Users,
                 group: '/admin/participant',
+            },
+            {
+                title: 'Faq',
+                url: '/admin/faq',
+                icon: FileQuestion,
+                group: '/admin/faq',
             },
             {
                 title: 'Utilisateurs',

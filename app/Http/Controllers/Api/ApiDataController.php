@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Offer;
+use App\Models\Activity;
 use App\Models\Candidate;
 use App\Models\JobPosition;
-use App\Models\Offer;
 use Illuminate\Http\Request;
 
 class ApiDataController
@@ -29,6 +30,24 @@ class ApiDataController
         $withExpired = (bool) $request->query('with_expired', true);
 
         $builder = Offer::query()->orderByDesc('updated_at');
+
+        if ($withExpired) {
+            return $builder->orderByDesc('updated_at')->get();
+        }
+        
+        return $builder->where('end_at', '<=', now())->get();
+    }
+
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Database\Eloquent\Collection<int, Activity>
+     */
+    public function activities(Request $request)
+    {
+        $withExpired = (bool) $request->query('with_expired', true);
+
+        $builder = Activity::query()->orderByDesc('updated_at');
 
         if ($withExpired) {
             return $builder->orderByDesc('updated_at')->get();
