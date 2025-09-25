@@ -3,24 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { ChipsSelector } from '@/components/ui/chips';
 import { Label } from '@/components/ui/label';
+import { arrayMonths } from '@/lib/constants';
 import { FilterYearMonth } from '@/types/filter';
 import { useForm } from '@inertiajs/react';
 import React, { FormEvent } from 'react';
-
-const months = {
-    '01': 'Janvier',
-    '02': 'Février',
-    '03': 'Mars',
-    '04': 'Avril',
-    '05': 'Mai',
-    '06': 'Juin',
-    '07': 'Juillet',
-    '08': 'Août',
-    '09': 'Septembre',
-    '10': 'Octobre',
-    '11': 'Novembre',
-    '12': 'Décembre',
-};
 
 const YEAR_START = 2025;
 const YEAR_INTERVAL = 3;
@@ -71,7 +57,7 @@ export const SpaceFilters: React.FC<Props> = ({ url, filters }) => {
                     <Label htmlFor="month">Mois</Label>
                     <ChipsSelector
                         clearable={false}
-                        items={Object.entries(months).map(([key, label]) => ({
+                        items={Object.entries(arrayMonths).map(([key, label]) => ({
                             id: key,
                             value: key,
                             label,

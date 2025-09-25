@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'role' => UserRoleEnum::ADMIN->value,
         ]);
 
-        Offer::factory(20)->create();
+        $offers = Offer::factory(20)->create();
 
         User::factory(5)->create([
             'role' => UserRoleEnum::ANONYMOUS->value,
@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
 
         JobPosition::factory(10)->create();
 
-        foreach (Offer::all() as $offer) {
+        foreach ($offers as $offer) {
             $randomMaxJobPositions = random_int(2, 3);
             $jobsIds = [];
             for ($i=0; $i < $randomMaxJobPositions; $i++) {
@@ -73,6 +73,15 @@ class DatabaseSeeder extends Seeder
             foreach ($activities as $activity) {
                 Participant::factory()->create([
                     'activity_id' => $activity->id,
+                    'candidate_id' => $candidate->id,
+                ]);
+            }
+        }
+
+        foreach (Candidate::all() as $candidate) {
+            foreach ($offers as $offer) {
+                Candidacy::factory()->create([
+                    'offer_id' => $offer->id,
                     'candidate_id' => $candidate->id,
                 ]);
             }

@@ -1,20 +1,22 @@
 import { Heading } from '@/components/heading';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdminLayout } from '@/layouts/admin-layout';
-import { DashboardPiechart, DashboardPiechartProps } from '@/shared/dashboard/dashboard-piechart';
 import { DashboardStats } from '@/shared/dashboard/dashboard-state';
+import { DashboardGraphics } from '@/shared/dashboard/graphics';
+import { ChartDataModel } from '@/types/model';
 import { Head } from '@inertiajs/react';
-import { Activity } from 'lucide-react';
 import React from 'react';
 
 type Props = {
-    countActivities: number;
-    countOffers: number;
-    countCandidates: number;
-    stats: DashboardPiechartProps;
+    counter: {
+        countActivities: number;
+        countOffers: number;
+        countCandidates: number;
+    };
+    stats: { chartData: ChartDataModel[]; years: string[] };
 };
 
-const Page: React.FC<Props> = ({ countActivities, countCandidates, countOffers, stats }) => {
+const Page: React.FC<Props> = ({ counter, stats }) => {
+    console.log(stats);
     return (
         <AdminLayout>
             <Head title="Tableau de bord" />
@@ -22,24 +24,10 @@ const Page: React.FC<Props> = ({ countActivities, countCandidates, countOffers, 
                 Retrouvez ici un aperçu rapide de vos activités, vos statistiques, et les actions importantes à suivre.
             </Heading>
 
-            <DashboardStats countActivities={countActivities} countCandidates={countCandidates} countOffers={countOffers} />
+            <DashboardStats countActivities={counter.countActivities} countCandidates={counter.countCandidates} countOffers={counter.countOffers} />
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Activity className="h-5 w-5" />
-                            Statistiques
-                        </CardTitle>
-                        <CardDescription>Les statistiques du dernier offre...</CardDescription>
-                    </CardHeader>
-                    <CardContent className="pl-2">
-                        <div className="flex h-[300px] items-center justify-center rounded-lg border border-dashed bg-muted/50">
-                            <DashboardPiechart stats={stats} />
-                        </div>
-                    </CardContent>
-                </Card>
-                {/* <DashboardLastNotifications /> */}
+            <div className="grid grid-cols-1">
+                <DashboardGraphics years={stats.years} chartData={stats.chartData} />
             </div>
         </AdminLayout>
     );

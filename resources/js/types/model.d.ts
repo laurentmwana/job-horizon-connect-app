@@ -83,3 +83,11 @@ export interface Faq extends DateTimeInterfaceModel {
     answer: string;
     is_star: boolean;
 }
+
+// OTHER MODELS
+
+export interface ChartDataModel {
+    month: string;
+    participants: number;
+    candidacies: number;
+}

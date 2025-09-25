@@ -8,15 +8,23 @@ export const useParams = <T extends Record<string, string>>() => {
         return Object.fromEntries(url.searchParams.entries()) as T;
     });
 
-    const mergeParams = (path: string): T => {
+    const mergeParams = (path: string, extra: Record<string, string> = {}): string => {
         const newUrl = getUrl(path);
 
         const merged = {
             ...params,
             ...Object.fromEntries(newUrl.searchParams.entries()),
-        } as T;
+            ...extra,
+        };
 
-        return merged;
+        const finalUrl = getUrl(newUrl.pathname);
+        Object.entries(merged).forEach(([key, value]) => {
+            if (value != null && value !== '') {
+                finalUrl.searchParams.set(key, value);
+            }
+        });
+
+        return finalUrl.toString();
     };
 
     return {
