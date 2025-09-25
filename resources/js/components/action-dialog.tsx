@@ -7,13 +7,21 @@ import { Link } from '@inertiajs/react';
 import { Edit, Ellipsis, Eye, Trash } from 'lucide-react';
 import { useState } from 'react';
 
+type RouteOther = {
+    onClick?: () => void;
+    icon: React.ReactNode;
+    content: string | React.ReactNode;
+    url?: string;
+};
+
 type ActionDialogProps = {
     routeEdit?: string | null;
     routeDelete?: string | null;
     routeShow?: string | null;
+    routeOther?: RouteOther;
 };
 
-export const ActionDialog = ({ routeShow = null, routeDelete = null, routeEdit = null }: ActionDialogProps) => {
+export const ActionDialog = ({ routeShow = null, routeDelete = null, routeEdit = null, routeOther }: ActionDialogProps) => {
     const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
 
     return (
@@ -34,6 +42,26 @@ export const ActionDialog = ({ routeShow = null, routeDelete = null, routeEdit =
                             </Link>
                         </DropdownMenuItem>
                     )}
+
+                    {routeOther ? (
+                        routeOther.url ? (
+                            <DropdownMenuItem asChild>
+                                <Link href={routeOther.url} className="flex items-center gap-2">
+                                    {routeOther.icon}
+                                    {routeOther.content}
+                                </Link>
+                            </DropdownMenuItem>
+                        ) : (
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    routeOther.onClick?.();
+                                }}
+                            >
+                                {routeOther.icon}
+                                {routeOther.content}
+                            </DropdownMenuItem>
+                        )
+                    ) : null}
 
                     {routeShow && (
                         <DropdownMenuItem asChild>
