@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\UserRoleEnum;
 use App\Models\User;
 
 class UserRepository
@@ -16,6 +17,30 @@ class UserRepository
     }
 
     /**
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function findPaginatedAndFiltered(int $perPage = 10)
+    {
+        $builder = $this->getBaseQuery();
+        return $builder->orderByDesc('updated_at')
+            ->paginate($perPage);
+    }
+
+    /**
+     * @param string $id
+     * @param bool $withRelation
+     * @return User
+     */
+    public function findById(string $id, bool $withRelation = false)
+    {
+        $builder = $this->getBaseQuery();
+        return $withRelation
+            ? $builder->with(['candidate'])->findOrFail($id)
+            : $builder->findOrFail($id);
+    }
+
+    /**
      * @param string $value
      * @return User|null
      */
@@ -24,5 +49,14 @@ class UserRepository
         return User::where(function ($query) use ($value) {
             $query->where('name', $value)->orWhere('email', $value);
         })->first();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder<User>
+     */
+    private function getBaseQuery()
+    {
+        return User::query()
+            ->where('role', '!=', UserRoleEnum::ADMIN->value);
     }
 }

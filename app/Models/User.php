@@ -76,7 +76,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isCandidate()
     {
-        return  $this->candidate !== null;
+        return  $this->candidate !== null && !$this->isAdmin();
     }
 
     /**

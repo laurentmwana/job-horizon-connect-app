@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Faq\AdminFaqController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Faq\AdminFaqController;
+use App\Http\Controllers\User\AdminUserController;
 use App\Http\Controllers\Offer\AdminOfferController;
 use App\Http\Controllers\Skill\AdminSkillController;
 use App\Http\Controllers\Activity\AdminActivityController;
@@ -58,5 +59,9 @@ Route::middleware($MIDDLEWARE_ARRAY)
         ->name('generate.participant.download');
 
     Route::resource('faq', AdminFaqController::class)
-            ->parameter('faq', 'id');
+        ->parameter('faq', 'id');
+    Route::resource('user', AdminUserController::class)
+        ->parameter('user', 'id');
+    Route::post('user/{id}/password', [AdminUserController::class, 'updatePassword'])
+        ->name('user.password');
 });
