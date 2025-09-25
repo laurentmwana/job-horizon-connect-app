@@ -66,14 +66,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach (Offer::all() as $offer) {
-            foreach (Candidate::all() as $candidate) {
-                Candidacy::factory()->create([
-                    'offer_id' => $offer->id,
-                    'candidate_id' => $candidate->id
-                ]);
-            }
-        }
+       
         $activities = Activity::factory(20)->create();
 
         foreach (Candidate::all() as $candidate) {

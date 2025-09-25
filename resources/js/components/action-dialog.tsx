@@ -18,7 +18,7 @@ type ActionDialogProps = {
     routeEdit?: string | null;
     routeDelete?: string | null;
     routeShow?: string | null;
-    routeOther?: RouteOther;
+    routeOther?: RouteOther | RouteOther[];
 };
 
 export const ActionDialog = ({ routeShow = null, routeDelete = null, routeEdit = null, routeOther }: ActionDialogProps) => {
@@ -44,22 +44,10 @@ export const ActionDialog = ({ routeShow = null, routeDelete = null, routeEdit =
                     )}
 
                     {routeOther ? (
-                        routeOther.url ? (
-                            <DropdownMenuItem asChild>
-                                <Link href={routeOther.url} className="flex items-center gap-2">
-                                    {routeOther.icon}
-                                    {routeOther.content}
-                                </Link>
-                            </DropdownMenuItem>
+                        Array.isArray(routeOther) ? (
+                            routeOther.map((r) => <RouteOtherItem routeOther={r} />)
                         ) : (
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    routeOther.onClick?.();
-                                }}
-                            >
-                                {routeOther.icon}
-                                {routeOther.content}
-                            </DropdownMenuItem>
+                            <RouteOtherItem routeOther={routeOther} />
                         )
                     ) : null}
 
@@ -83,5 +71,27 @@ export const ActionDialog = ({ routeShow = null, routeDelete = null, routeEdit =
 
             {routeDelete && <ConfirmationPasswordDialog setOpen={setOpenModalDelete} open={openModalDelete} url={routeDelete} />}
         </>
+    );
+};
+
+type RouteOtherItemProps = { routeOther: RouteOther };
+
+const RouteOtherItem: React.FC<RouteOtherItemProps> = ({ routeOther }) => {
+    return routeOther.url ? (
+        <DropdownMenuItem asChild>
+            <Link href={routeOther.url} className="flex items-center gap-2">
+                {routeOther.icon}
+                {routeOther.content}
+            </Link>
+        </DropdownMenuItem>
+    ) : (
+        <DropdownMenuItem
+            onClick={() => {
+                routeOther.onClick?.();
+            }}
+        >
+            {routeOther.icon}
+            {routeOther.content}
+        </DropdownMenuItem>
     );
 };
